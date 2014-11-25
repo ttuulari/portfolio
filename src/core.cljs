@@ -21,3 +21,7 @@
 
 (om/root components-view app-state
   {:target (. js/document (getElementById "components"))})
+
+
+(def d3 [[0 7] [4 50] [8 10] [9 13] [11 6]])
+(swap! app-state assoc :data [d2 d1])
