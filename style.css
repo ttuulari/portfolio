@@ -3,8 +3,18 @@ body
   margin: 0px;
   padding: 0px;
 }
-.container {
+.graph-view {
   width : 600px;
   height: 384px;
   margin: 8px auto;
+}
+
+.input-view {
+  width : 200px;
+  height: 100px;
+  margin: 8px auto;
+}
+
+.glyphicon-search {
+  height: 20px;
 }

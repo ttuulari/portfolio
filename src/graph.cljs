@@ -16,12 +16,12 @@
   (reify
     om/IDidMount
     (did-mount [this]
-      (draw (.getDOMNode owner) app))
+      (draw (om/get-node owner) app))
 
     om/IDidUpdate
     (did-update [this prev-props prev-state]
-      (draw (.getDOMNode owner) app))
+      (draw (om/get-node owner) app))
 
     om/IRenderState
     (render-state [this state]
-      (dom/div #js {:className "container"}))))
+      (dom/div #js {:className "graph-view"}))))

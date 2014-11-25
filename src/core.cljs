@@ -1,6 +1,7 @@
 (ns portfolio.core
   (:require
     [portfolio.graph :as graph]
+    [portfolio.input :as input]
     [om.core :as om :include-macros true]
     [om.dom :as dom :include-macros true]))
 
@@ -15,13 +16,15 @@
     om/IRenderState
     (render-state [this state]
       (dom/div nil
-        (dom/button #js {} "Jepaje")
-        (apply dom/div #js {:className "base"}
-          (om/build-all graph/graph-view [(:data app)]))))))
+        (om/build input/input-view true)
+        (dom/div #js {:className "base-view"}
+          (om/build graph/graph-view (:data app)))))))
 
-(om/root components-view app-state
+(om/root
+  components-view
+  app-state
   {:target (. js/document (getElementById "components"))})
 
 
 (def d3 [[0 7] [4 50] [8 10] [9 13] [11 6]])
-(swap! app-state assoc :data [d2 d1])
+(swap! app-state assoc :data [d1 d2])
