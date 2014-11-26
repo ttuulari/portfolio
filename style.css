@@ -1,18 +1,32 @@
-body
-{
-  margin: 0px;
-  padding: 0px;
+body {
+  background: #fff;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;;
+  font-size: 15px;
+  line-height: 1.7;
+  margin: 0;
+  padding: 30px;
 }
+
+a {
+  color: #4183c4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 .graph-view {
   width : 600px;
   height: 384px;
   margin: 8px auto;
 }
 
-.input-view {
-  width : 200px;
-  height: 100px;
-  margin: 8px auto;
+.search-view {
+}
+
+.form-control {
+  width : 300px;
 }
 
 .glyphicon-search {
@@ -20,7 +34,7 @@ body
 }
 
 .search-results {
-  width: 250px;
+  width: 300px;
   z-index: 10;
   position: absolute;
 }

@@ -8,10 +8,10 @@
     [om.dom :as dom :include-macros true])
   (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
 
-(def names ["noksu" "wärre" "warre"])
+(def names ["noksu" "wärre" "warre" "Aino" "alpo" "Teemu"])
 
 (defn prefix? [to-test prefix]
-  (= (.indexOf to-test (.toLowerCase prefix)) 0))
+  (= (.indexOf (.toLowerCase to-test) (.toLowerCase prefix)) 0))
 
 (defn prefix->strs [prefix str-list]
   (let [pre?     (fn [elem] (prefix? elem prefix))
@@ -27,11 +27,10 @@
       (dom/a
         #js {:className   "list-group-item"
              :onClick     (fn []
-                            (go
                               (put!
                                 (:search-chan (om/get-shared owner))
                                 {:topic :search-click
-                                 :value app})))}
+                                 :value app}))}
         app))))
 
 (defn results-view [app owner]
