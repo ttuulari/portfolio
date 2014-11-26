@@ -4,7 +4,7 @@
       :refer [>! put! sub chan]]
     [om.core :as om :include-macros true]
     [om.dom :as dom :include-macros true])
-  (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
+  (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
 (defn submit [owner]
   (let [value         (.trim (.-value (om/get-node owner "term")))

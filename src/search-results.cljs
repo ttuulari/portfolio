@@ -2,11 +2,9 @@
   (:require
     [cljs.core.async :as async
       :refer [<! >! chan put! sub]]
-    [portfolio.graph :as graph]
-    [portfolio.input :as input]
     [om.core :as om :include-macros true]
     [om.dom :as dom :include-macros true])
-  (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
+  (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
 (def names ["noksu" "wärre" "warre" "Aino" "alpo" "Teemu"])
 
