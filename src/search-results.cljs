@@ -1,12 +1,12 @@
 (ns portfolio.search-results
   (:require
     [cljs.core.async :as async
-      :refer [<! >! chan put! timeout]]
+      :refer [<! >! chan put! sub]]
     [portfolio.graph :as graph]
     [portfolio.input :as input]
     [om.core :as om :include-macros true]
     [om.dom :as dom :include-macros true])
-  (:require-macros [cljs.core.async.macros :refer [go-loop]]))
+  (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
 
 (def names ["noksu" "wärre" "warre"])
 
@@ -14,24 +14,42 @@
   (= (.indexOf to-test (.toLowerCase prefix)) 0))
 
 (defn prefix->strs [prefix str-list]
-  (let [pre?   (fn [elem] (prefix? elem prefix))]
-    (filter pre? str-list)))
+  (let [pre?     (fn [elem] (prefix? elem prefix))
+        filtered (filter pre? str-list)]
+    (if (= (count filtered) (count str-list))
+      []
+      (vec filtered))))
 
 (defn result-view [app owner]
   (reify
     om/IRenderState
     (render-state [this state]
-      (dom/div nil "Jepa"))))
+      (dom/a
+        #js {:className   "list-group-item"
+             :onClick     (fn []
+                            (go
+                              (put!
+                                (:search-chan (om/get-shared owner))
+                                {:topic :search-click
+                                 :value app})))}
+        app))))
 
 (defn results-view [app owner]
   (reify
     om/IWillMount
     (will-mount [this]
-      (let [search-chan  (:search-chan (om/get-shared owner))]
+      (let [search-chan (sub (:notif-chan (om/get-shared owner)) :search (chan) false)
+            click-chan  (sub (:notif-chan (om/get-shared owner)) :search-click (chan) false)]
         (go-loop []
-          (let [search-elem          (<! search-chan)]
-            (when (= (:op search-elem) :search)
-              (.log js/console (clj->js (prefix->strs (:value search-elem) names))))
+          (let [[v c] (alts! [search-chan click-chan]
+                             {:as {:default true}})
+                reset-results    (fn [_] [])
+                update-results   (fn [_]
+                                   (prefix->strs (:value v) names))]
+            (condp = c
+              search-chan   (om/transact! app update-results)
+              click-chan    (om/transact! app reset-results))
+              :default      nil
             (recur)))))
 
     om/IRenderState
@@ -39,4 +57,6 @@
       (apply dom/div #js {:className "list-group search-results"}
         (om/build-all
           result-view
-          [1])))))
+          (map
+            (fn [elem] elem)
+            app))))))
