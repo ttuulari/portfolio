@@ -1,11 +1,18 @@
 (ns portfolio.input
   (:require
+    [cljs.core.async :as async
+      :refer [>! go]]
     [om.core :as om :include-macros true]
-    [om.dom :as dom :include-macros true]))
+    [om.dom :as dom :include-macros true])
+  (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (defn submit [owner]
-  (let [value   (.trim (.-value (om/get-node owner "term")))]
-    (.log js/console value)
+  (let [value         (.trim (.-value (om/get-node owner "term")))
+        search-chan   (:search-chan  (om/get-shared owner))]
+    (go
+      (>! search-chan
+          {:op :search
+           :value value}))
     false))
 
 (defn input-view [app owner]
@@ -18,7 +25,7 @@
             :className "navbar-form"
             :role: "search"
             :onSubmit (fn [] (submit owner))
-            :onChange (fn [_] (.log js/console "onChange"))}
+            :onChange (fn [] (submit owner))}
           (dom/div #js {:className "input-group searchInput"}
             (dom/div #js {:className "input-group-btn"}
               [(dom/input #js {:type "text"

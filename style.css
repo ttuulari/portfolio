@@ -18,3 +18,9 @@ body
 .glyphicon-search {
   height: 20px;
 }
+
+.search-results {
+  width: 250px;
+  z-index: 10;
+  position: absolute;
+}
