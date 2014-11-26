@@ -4,6 +4,7 @@
       :refer [<! >! chan pub put! timeout]]
     [portfolio.graph :as graph]
     [portfolio.input :as input]
+    [portfolio.components :as components]
     [portfolio.search-results :as search-results]
     [om.core :as om :include-macros true]
     [om.dom :as dom :include-macros true])
@@ -24,10 +25,10 @@
     om/IRenderState
     (render-state [this state]
       (dom/div nil
+        (om/build graph/graph-view (:data app))
+        (om/build components/portfolio-list-view (:components app))
         (om/build input/input-view true)
-        (om/build search-results/results-view (:results app))
-        (dom/div #js {:className "base-view"}
-          (om/build graph/graph-view (:data app)))))))
+        (om/build search-results/results-view (:results app))))))
 
 (om/root
   components-view
