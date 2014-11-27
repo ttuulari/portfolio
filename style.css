@@ -22,19 +22,29 @@ a:hover {
   margin: 8px;
 }
 
-.search-view {
-}
-
 .form-control {
-  width : 300px;
+
 }
 
 .glyphicon-search {
   height: 20px;
 }
 
+.search-view {
+  width : 300px;
+}
+
+.search-container {
+  vertical-align:top;
+  display: inline-block;
+}
+
 .search-results {
   width: 300px;
   z-index: 10;
   position: absolute;
+}
+
+.portfolio-list {
+  display: inline-block;
 }

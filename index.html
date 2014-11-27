@@ -2,10 +2,13 @@
     <head>
         <link rel="stylesheet" href="style.css"/>
         <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css">
+        <link href="ripples.min.css" rel="stylesheet">
+        <link href="material-wfont.min.css" rel="stylesheet">
+
     </head>
     <body>
         <div id="components"></div>
-        <script type='text/javascript' id='lt_ws' src='http://localhost:49159/socket.io/lighttable/ws.js'></script>
+        <script type='text/javascript' id='lt_ws' src='http://localhost:50378/socket.io/lighttable/ws.js'></script>
         <script src="lib/react-0.11.1.js"></script>
         <script src="lib/lib.js"></script>
         <script src="lib/flotr2.js"></script>
@@ -14,5 +17,12 @@
         <script type="text/javascript">goog.require("portfolio.core");</script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="lib/ripples.min.js"></script>
+        <script src="lib/material.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $.material.init();
+            });
+        </script>
     </body>
 </html>
