@@ -36,7 +36,6 @@ a:hover {
 
 .search-container {
   vertical-align:top;
-  display: inline-block;
 }
 
 .search-results {
@@ -45,6 +44,6 @@ a:hover {
   position: absolute;
 }
 
-.portfolio-list {
-  display: inline-block;
+.portfolio-table {
+/*  display: inline-block; */
 }

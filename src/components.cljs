@@ -10,11 +10,11 @@
   (reify
     om/IRenderState
     (render-state [this state]
-      (dom/a
-        #js {:className   "list-group-item"}
-        app))))
-
-(conj [ 1 2] 1)
+      (dom/tr
+        nil
+        (dom/td nil app)
+        (dom/td nil "616")
+        (dom/td nil "700")))))
 
 (defn portfolio-list-view [app owner]
   (reify
@@ -30,10 +30,16 @@
 
     om/IRenderState
     (render-state [this state]
-      (apply dom/div #js {:className "list-group portfolio-list"}
-        (om/build-all
-          portfolio-component-view
-          (map
-            (fn [elem] elem)
-            app))))))
+      (dom/table #js {:className "table table-striped table-hover portfolio-table"}
+        (dom/thead nil
+          (dom/tr nil
+            (dom/th nil "Instrument")
+            (dom/th nil "Amount")
+            (dom/th nil "Price")))
+        (apply dom/tbody nil
+          (om/build-all
+            portfolio-component-view
+            (map
+              (fn [elem] elem)
+              app)))))))
 
