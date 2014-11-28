@@ -1,16 +1,20 @@
-(ns portfolio.graph
+(ns portfolio.graph2
   (:require
     [om.core :as om :include-macros true]
     [om.dom :as dom :include-macros true]))
 
-(def options {:xaxis
-                {:minorTickFreq 2}
-              :grid {:minorVerticalLines false}})
-
-(defn draw [element data]
-  (js/Flotr.draw
-    element
-    (clj->js data) (clj->js options)))
+(defn draw [element input-data]
+  (let [[labels series]   (apply map vector input-data)
+        data              {:labels labels
+                           :series [series]}
+        options           {:width 300
+                           :height 300}
+        responsive-opts   []]
+    (js/Chartist.Line.
+      element
+      (clj->js data)
+      (clj->js options)
+      (clj->js responsive-opts))))
 
 (defn graph-view [app owner]
   (reify
@@ -24,4 +28,4 @@
 
     om/IRenderState
     (render-state [this state]
-      (dom/div #js {:className "graph-view"}))))
+      (dom/div #js {:className "ct-chart"}))))

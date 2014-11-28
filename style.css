@@ -47,3 +47,8 @@ a:hover {
 .portfolio-table {
 /*  display: inline-block; */
 }
+
+.ct-chart {
+  width: 400px;
+  height: 300px;
+}

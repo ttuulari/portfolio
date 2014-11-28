@@ -21,7 +21,8 @@
                 :output-to "portfolio.js"
                 :output-dir "out"
                 :optimizations :none
-                :externs ["lib/lib.js"
+                :externs ["chartist.js"
+                          "lib/lib.js"
                           "lib/flotr2.js"
                           ]
                 :source-map true}}]})
