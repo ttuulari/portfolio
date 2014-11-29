@@ -18,7 +18,7 @@
         (dom/div #js {:className   "portfolio-list-column col-sm-4"} app)
         (dom/div #js {:className   "portfolio-list-column col-sm-4"} 616)
         (om/build slider/slider-view
-          nil
+          app
           {:opts
             {:js       {:className "slider-material-pink shor col-sm-4"}
              :slider   {:start 0
