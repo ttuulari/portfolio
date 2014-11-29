@@ -30,7 +30,7 @@
   (reify
     om/IRenderState
     (render-state [this state]
-      (dom/div
+      (dom/h4
         #js {:className   "portfolio-list-column col-sm-4"}
         (dom/div nil app)))))
 
