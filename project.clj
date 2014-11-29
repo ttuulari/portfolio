@@ -8,7 +8,8 @@
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/clojurescript "0.0-2311"]
                  [org.clojure/core.async "0.1.267.0-0d7780-alpha"]
-                 [om "0.7.1"]]
+                 [om "0.7.1"]
+                 [jayq "2.5.2"]]
 
   :plugins [[lein-cljsbuild "1.0.4-SNAPSHOT"]]
 
