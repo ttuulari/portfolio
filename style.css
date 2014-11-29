@@ -26,15 +26,8 @@ a:hover {
 
 }
 
-.glyphicon-search {
-  height: 20px;
-}
-
-.search-view {
-  width : 300px;
-}
-
 .search-container {
+  width : 300px;
   vertical-align:top;
 }
 
@@ -62,4 +55,7 @@ a:hover {
 .ct-chart {
   width: 400px;
   height: 300px;
+}
+
+.searchInput {
 }

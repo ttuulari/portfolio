@@ -26,23 +26,18 @@
 
     om/IRenderState
     (render-state [this state]
-      (dom/div #js {:className "search-view"}
+      (dom/div #js {:className "form-group search-container"}
         (dom/form #js
           {
             :className "navbar-form"
             :role: "search"
             :onSubmit (fn [] (submit owner))
             :onChange (fn [] (submit owner))}
-          (dom/div #js {:className "input-group searchInput"}
-            (dom/div #js {:className "input-group-btn"}
-              [(dom/input #js {:type "text"
-                              :autoComplete "off"
-                              :className "form-control floating-label"
-                              :placeholder "Instrument"
-                              :data-hint "Start typing instrument name"
-                              :name "srch-term"
-                              :id "srch-term"
-                              :ref "term"})
-               (dom/button #js {:className "btn btn-default"
-                                :type "submit"}
-                 (dom/i #js {:className "glyphicon glyphicon-search"}))])))))))
+        (dom/input #js {:type "text"
+                        :autoComplete "off"
+                        :className "form-control floating-label"
+                        :placeholder "Instrument"
+                        :data-hint "Start typing instrument name"
+                        :name "srch-term"
+                        :id "srch-term"
+                        :ref "term"}))))))
