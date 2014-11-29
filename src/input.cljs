@@ -37,8 +37,9 @@
             (dom/div #js {:className "input-group-btn"}
               [(dom/input #js {:type "text"
                               :autoComplete "off"
-                              :className "form-control"
+                              :className "form-control floating-label"
                               :placeholder "Instrument"
+                              :data-hint "Start typing instrument name"
                               :name "srch-term"
                               :id "srch-term"
                               :ref "term"})

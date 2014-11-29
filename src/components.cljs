@@ -20,7 +20,7 @@
         (om/build slider/slider-view
           nil
           {:opts
-            {:js       {:className "slider shor col-sm-4"}
+            {:js       {:className "slider-material-pink shor col-sm-4"}
              :slider   {:start 0
                         :connect "lower"
                         :range {:min 0

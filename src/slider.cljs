@@ -4,9 +4,13 @@
     [om.dom :as dom :include-macros true])
   (:use [jayq.core :only [$ css html]]))
 
+(defn on-slide [elem]
+  (.log js/console (.val elem)))
+
 (defn draw [element opts]
   (let [$elem   ($ element)]
-    (.noUiSlider $elem (clj->js (:slider opts)))))
+    (.noUiSlider $elem (clj->js (:slider opts)))
+    (.on $elem "slide" (fn [] (on-slide $elem)))))
 
 (defn slider-view [app owner opts]
   (reify
