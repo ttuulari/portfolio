@@ -42,10 +42,22 @@ a:hover {
   width: 300px;
   z-index: 10;
   position: absolute;
+  cursor:pointer;
 }
 
-.portfolio-table {
+.portfolio-container {
+}
+
+.portfolio-list {
 /*  display: inline-block; */
+}
+
+.portfolio-list-column {
+  display: inline-block;
+  width: 10%;
+}
+
+.portfolio-component {
 }
 
 .ct-chart {

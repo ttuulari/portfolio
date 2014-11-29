@@ -6,15 +6,34 @@
     [om.dom :as dom :include-macros true])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
+(def columns ["Component" "# Amount" "$ Price"])
+
 (defn portfolio-component-view [app owner]
   (reify
     om/IRenderState
     (render-state [this state]
-      (dom/tr
-        nil
-        (dom/td nil app)
-        (dom/td nil "616")
-        (dom/td nil "700")))))
+      (dom/div
+        #js {:className   "list-group-item portfolio-component"}
+        (dom/div #js {:className   "portfolio-list-column"} app)
+        (dom/div #js {:className   "portfolio-list-column"} 616)
+        (dom/div #js {:className   "portfolio-list-column"} 777)))))
+
+(defn portfolio-list-column [app owner]
+  (reify
+    om/IRenderState
+    (render-state [this state]
+      (dom/div
+        #js {:className   "portfolio-list-column"}
+        (dom/div nil app)))))
+
+(defn portfolio-list-columns [app owner]
+  (reify
+    om/IRenderState
+    (render-state [this state]
+      (apply dom/div #js {:className "portfolio-list-columns"}
+        (om/build-all
+          portfolio-list-column
+          (map (fn [elem] elem) columns))))))
 
 (defn portfolio-list-view [app owner]
   (reify
@@ -30,16 +49,11 @@
 
     om/IRenderState
     (render-state [this state]
-      (dom/table #js {:className "table table-striped table-hover portfolio-table"}
-        (dom/thead nil
-          (dom/tr nil
-            (dom/th nil "Instrument")
-            (dom/th nil "Amount")
-            (dom/th nil "Price")))
-        (apply dom/tbody nil
+      (dom/div #js {:className "portfolio-container"}
+        (om/build portfolio-list-columns true)
+        (apply dom/div #js {:className "list-group portfolio-list"}
           (om/build-all
             portfolio-component-view
             (map
               (fn [elem] elem)
               app)))))))
-
