@@ -3,7 +3,8 @@
     [cljs.core.async :as async
       :refer [<! >! chan put! sub]]
     [om.core :as om :include-macros true]
-    [om.dom :as dom :include-macros true])
+    [om.dom :as dom :include-macros true]
+    [portfolio.slider :as slider])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
 (def columns ["Component" "# Amount" "$ Price"])
@@ -14,16 +15,23 @@
     (render-state [this state]
       (dom/div
         #js {:className   "list-group-item portfolio-component"}
-        (dom/div #js {:className   "portfolio-list-column"} app)
-        (dom/div #js {:className   "portfolio-list-column"} 616)
-        (dom/div #js {:className   "portfolio-list-column"} 777)))))
+        (dom/div #js {:className   "portfolio-list-column col-sm-4"} app)
+        (dom/div #js {:className   "portfolio-list-column col-sm-4"} 616)
+        (om/build slider/slider-view
+          nil
+          {:opts
+            {:js       {:className "slider shor col-sm-4"}
+             :slider   {:start 0
+                        :connect "lower"
+                        :range {:min 0
+                                :max 100}}}})))))
 
 (defn portfolio-list-column [app owner]
   (reify
     om/IRenderState
     (render-state [this state]
       (dom/div
-        #js {:className   "portfolio-list-column"}
+        #js {:className   "portfolio-list-column col-sm-4"}
         (dom/div nil app)))))
 
 (defn portfolio-list-columns [app owner]
