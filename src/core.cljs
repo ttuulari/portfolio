@@ -2,7 +2,7 @@
   (:require
     [cljs.core.async :as async
       :refer [<! >! chan pub put! timeout]]
-    [portfolio.graph2 :as graph]
+    [portfolio.graph :as graph]
     [portfolio.input :as input]
     [portfolio.components :as components]
     [portfolio.search-results :as search-results]
