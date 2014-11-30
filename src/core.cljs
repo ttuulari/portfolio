@@ -24,10 +24,11 @@
     om/IRenderState
     (render-state [this state]
       (dom/div nil
-        (dom/div #js {:className "search-container"}
-          (om/build input/input-view true)
-          (om/build search-results/results-view (:results app)))
-        (om/build graph/graph-view (:data app))
+        (dom/div nil
+          (dom/div #js {:className "search-container"}
+            (om/build input/input-view true)
+            (om/build search-results/results-view (:results app)))
+          (om/build graph/graph-view (:data app)))
         (om/build components/portfolio-list-view (:components app))))))
 
 (om/root

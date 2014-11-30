@@ -28,4 +28,4 @@
 
     om/IRenderState
     (render-state [this state]
-      (dom/div #js {:className "ct-chart"}))))
+      (dom/div #js {:className "ct-chart portfolio-graph"}))))
