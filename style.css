@@ -29,6 +29,7 @@ a:hover {
 .search-container {
   width : 300px;
   vertical-align:top;
+  display: inline-block;
 }
 
 .search-results {
@@ -52,7 +53,8 @@ a:hover {
 .portfolio-component {
 }
 
-.ct-chart {
+.portfolio-graph {
+  display: inline-block;
   width: 400px;
   height: 300px;
 }
