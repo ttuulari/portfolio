@@ -40,7 +40,9 @@
           (let [[v c]            (alts! [remove-chan click-chan]
                                    {:as {:default true}})
                 add-component    (fn []
-                                   (conj @app (:value v)))
+                                   (if (some #{(:value v)} @app)
+                                     @app
+                                     (conj @app (:value v))))
 
                 remove-component (fn []
                                    (remove (fn [elem] (= elem (:value v))) @app))]
