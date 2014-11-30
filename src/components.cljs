@@ -4,42 +4,11 @@
       :refer [<! >! chan put! sub]]
     [om.core :as om :include-macros true]
     [om.dom :as dom :include-macros true]
+    [portfolio.component-row :as component-row]
     [portfolio.slider :as slider])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
 (def columns ["Component" "# Amount" "$ Price"])
-
-(defn remove-button-view [app owner]
-  (reify
-    om/IRenderState
-    (render-state [this state]
-      (dom/a #js {:className   "btn btn-danger btn-raised remove-button col-sm-2"
-                  :onClick     (fn []
-                                 (put!
-                                   (:search-chan (om/get-shared owner))
-                                   {:topic :remove-click
-                                    :value app}))}
-
-        "Remove"))))
-
-(defn portfolio-component-view [app owner]
-  (reify
-    om/IRenderState
-    (render-state [this state]
-      (dom/div
-        #js {:className   "list-group-item portfolio-component"}
-        (dom/div #js {:className "row"}
-          (dom/div #js {:className   "portfolio-list-column col-sm-2"} app)
-          (dom/div #js {:className   "portfolio-list-column col-sm-2"} 616)
-          (om/build slider/slider-view
-            app
-            {:opts
-              {:js       {:className "slider-material-red shor col-sm-2"}
-               :slider   {:start 0
-                          :connect "lower"
-                          :range {:min 0
-                                  :max 100}}}})
-          (om/build remove-button-view app))))))
 
 (defn portfolio-list-column [app owner]
   (reify
@@ -58,7 +27,6 @@
           (om/build-all
             portfolio-list-column
             (map (fn [elem] elem) columns)))))))
-
 
 
 (defn portfolio-list-view [app owner]
@@ -89,7 +57,7 @@
         (om/build portfolio-list-columns true)
         (apply dom/div #js {:className "list-group portfolio-list"}
           (om/build-all
-            portfolio-component-view
+            component-row/portfolio-component-view
             (map
               (fn [elem] elem)
               app)))))))
