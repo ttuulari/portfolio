@@ -16,7 +16,7 @@
 (defn draw [opts owner app]
   (let [element (om/get-node owner)
         $elem   ($ element)]
-    (.noUiSlider $elem (clj->js (:slider opts)))
+    (.noUiSlider $elem (clj->js (:slider opts)) true)
     (.on $elem "slide" (fn [] (on-slide $elem owner app)))))
 
 (defn slider-view [app owner opts]
