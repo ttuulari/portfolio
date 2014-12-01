@@ -3,28 +3,27 @@
     [om.core :as om :include-macros true]
     [om.dom :as dom :include-macros true]))
 
-(defn draw [element input-data]
-  (let [[labels series]   (apply map vector input-data)
+(defn draw [element input-data opts]
+  (let [{:keys [dates prices]} input-data
+        labels            dates
         data              {:labels labels
-                           :series [series]}
-        options           {:width 300
-                           :height 300}
+                           :series [prices]}
         responsive-opts   []]
     (js/Chartist.Line.
       element
       (clj->js data)
-      (clj->js options)
+      (clj->js (:graph opts))
       (clj->js responsive-opts))))
 
-(defn graph-view [app owner]
+(defn graph-view [app owner opts]
   (reify
     om/IDidMount
     (did-mount [this]
-      (draw (om/get-node owner) app))
+      (draw (om/get-node owner) app opts))
 
     om/IDidUpdate
     (did-update [this prev-props prev-state]
-      (draw (om/get-node owner) app))
+      (draw (om/get-node owner) app opts))
 
     om/IRenderState
     (render-state [this state]

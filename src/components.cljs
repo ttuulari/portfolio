@@ -28,7 +28,6 @@
             portfolio-list-column
             (map (fn [elem] elem) columns)))))))
 
-
 (defn portfolio-list-view [app owner]
   (reify
     om/IWillMount
