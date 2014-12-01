@@ -10,7 +10,7 @@
   (reify
     om/IRenderState
     (render-state [this state]
-      (dom/a #js {:className   "btn btn-danger btn-raised remove-button col-sm-2"
+      (dom/a #js {:className   "btn btn-danger btn-xs remove-button"
                   :onClick     (fn []
                                  (put!
                                    (:search-chan (om/get-shared owner))
