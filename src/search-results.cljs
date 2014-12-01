@@ -6,8 +6,6 @@
     [om.dom :as dom :include-macros true])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
-(def names ["noksu" "wärre" "warre" "Aino" "alpo" "Teemu"])
-
 (defn prefix? [to-test prefix]
   (= (.indexOf (.toLowerCase to-test) (.toLowerCase prefix)) 0))
 
@@ -42,10 +40,10 @@
                              {:as {:default true}})
                 reset-results    (fn [_] [])
                 update-results   (fn [_]
-                                   (prefix->strs (:value v) names))]
+                                   (prefix->strs (:value v) (keys (:data @app))))]
             (condp = c
-              search-chan   (om/transact! app update-results)
-              click-chan    (om/transact! app reset-results))
+              search-chan   (om/transact! app :results update-results)
+              click-chan    (om/transact! app :results reset-results))
               :default      nil
             (recur)))))
 
@@ -56,4 +54,4 @@
           result-view
           (map
             (fn [elem] elem)
-            app))))))
+            (:results app)))))))
