@@ -26,13 +26,12 @@
 
 (defn handle-change
   "Grab the input element via the `input` reference."
-  [owner state]
+  [owner state component-name]
   (let [value         (parse-input-num (.-value (om/get-node owner "term")))
         search-chan   (:search-chan  (om/get-shared owner))
-        data          {:topic :amount
+        data          {:topic :component-amount
                        :value {:name component-name
                                :amount value}}]
-
     (put! search-chan data)
     (om/set-state! owner :text value)
     false))
@@ -52,7 +51,7 @@
                                         :ref           "term"
                                         :value         (:text state)
                                         :placeholder   (:amount app)
-                                        :onChange      #(handle-change owner state)
+                                        :onChange      #(handle-change owner state (:name app))
                                         }))))))
 
 (defn portfolio-component-view [app owner]

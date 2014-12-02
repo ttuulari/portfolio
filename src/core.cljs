@@ -31,8 +31,23 @@
 
 (defn graph-input-data
   [input]
-  {:labels   (get-in input [:data "Ford Motor Co." :dates])
-   :series   [(get-in input [:data "Ford Motor Co." :prices])]})
+  (let [labels        (-> input
+                          :data
+                          first
+                          second
+                          :dates)
+
+        mult-price    (fn [[name amount]]
+                        (map (fn [elem] (* amount elem))
+                             (:prices (get (:data input) name))))
+
+        prices        (map mult-price (:components input))]
+
+    (if (empty? prices)
+      {:labels   labels
+       :series   [(repeat (count labels) 1.0)]}
+      {:labels   labels
+       :series   [(apply map + prices)]})))
 
 (defn components-view [app owner]
   (reify
@@ -47,7 +62,7 @@
                     (graph-input-data app)
                     {:opts
                       {:js          {:className "ct-chart portfolio-graph"}
-                       :graph-opts  {:width 400
+                       :graph-opts  {:width 500
                                     :height 300
                                     :showPoint false
                                     :axisY {

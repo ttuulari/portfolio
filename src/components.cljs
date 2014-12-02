@@ -4,6 +4,7 @@
       :refer [<! >! chan put! sub]]
     [om.core :as om :include-macros true]
     [om.dom :as dom :include-macros true]
+    [portfolio.util :as util]
     [portfolio.component-row :as component-row]
     [portfolio.search-results :as search]
     [portfolio.slider :as slider])
@@ -34,25 +35,33 @@
     om/IWillMount
     (will-mount [this]
       (let [click-chan       (sub (:notif-chan (om/get-shared owner)) :search-click (chan) false)
-            remove-chan      (sub (:notif-chan (om/get-shared owner)) :remove-click (chan) false)]
+            remove-chan      (sub (:notif-chan (om/get-shared owner)) :remove-click (chan) false)
+            amount-chan      (sub (:notif-chan (om/get-shared owner)) :component-amount (chan) false)]
 
         (go-loop []
-          (let [[v c]            (alts! [remove-chan click-chan]
+          (let [[v c]            (alts! [remove-chan click-chan amount-chan]
                                    {:as {:default true}})
                 add-component    (fn []
-                                   (if (contains? (:value v) (:components @app))
+                                   (if (contains? (:components @app) (:value v))
                                      @app
                                      (assoc-in @app [:components (:value v)] 0)))
+
+                update-component    (fn []
+                                      (let [c-name   (get-in v [:value :name])
+                                            c-amount (get-in v [:value :amount])]
+                                        (if (contains? (:components @app) c-name)
+                                          (assoc-in @app [:components c-name] c-amount)
+                                          @app)))
 
                 remove-component (fn []
                                    (assoc @app
                                           :components
                                           (dissoc (:components @app) (get-in v [:value :name]))))]
 
-
             (condp = c
               remove-chan   (om/transact! app remove-component)
               click-chan    (om/transact! app add-component)
+              amount-chan   (om/transact! app update-component)
               :default      nil))
             (recur))))
 
