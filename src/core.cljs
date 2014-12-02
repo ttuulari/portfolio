@@ -45,7 +45,7 @@
 
     (if (empty? prices)
       {:labels   labels
-       :series   [(repeat (count labels) 1.0)]}
+       :series   [(repeat (count labels) 0.0)]}
       {:labels   labels
        :series   [(apply map + prices)]})))
 
