@@ -24,18 +24,24 @@
 (defn parse-input-num [elem]
   (apply str (filter (fn [c] (not (js/isNaN c))) (.trim elem))))
 
-(defn submit [owner component-name]
+(defn handle-change
+  "Grab the input element via the `input` reference."
+  [owner state]
   (let [value         (parse-input-num (.-value (om/get-node owner "term")))
         search-chan   (:search-chan  (om/get-shared owner))
         data          {:topic :amount
                        :value {:name component-name
                                :amount value}}]
-    (.log js/console (clj->js value))
+
     (put! search-chan data)
+    (om/set-state! owner :text value)
     false))
 
 (defn amount-input-view [app owner]
   (reify
+    om/IInitState
+    (init-state [_] {:text ""})
+
     om/IRenderState
     (render-state [this state]
       (dom/div #js {:className "form-group col-sm-2"}
@@ -44,8 +50,9 @@
                                         :type          "text"
                                         :autoComplete  "off"
                                         :ref           "term"
+                                        :value         (:text state)
                                         :placeholder   (:amount app)
-                                        :onChange (fn [] (submit owner (:name app)))
+                                        :onChange      #(handle-change owner state)
                                         }))))))
 
 (defn portfolio-component-view [app owner]
