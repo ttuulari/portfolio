@@ -5,7 +5,6 @@
     [om.core :as om :include-macros true]
     [om.dom :as dom :include-macros true]
     [om-bootstrap.input :as i]
-    [portfolio.util :as util]
     [om-tools.core :refer-macros [defcomponentk]])
 
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
