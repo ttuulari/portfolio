@@ -32,3 +32,14 @@
     om/IRenderState
     (render-state [this state]
       (dom/div (clj->js (:js opts))))))
+
+
+(comment "usage"
+           (om/build slider/slider-view
+            app
+            {:opts
+              {:js       {:className "slider-material-red shor col-sm-2"}
+               :slider   {:start 0
+                          :connect "lower"
+                          :range {:min 0
+                                  :max 100}}}}))

@@ -21,13 +21,19 @@
     om/IRenderState
     (render-state [this state]
       (dom/a
-        #js {:className   "list-group-item"
-             :onClick     (fn []
-                              (put!
-                                (:search-chan (om/get-shared owner))
-                                {:topic :search-click
-                                 :value app}))}
-        app))))
+       #js {:className   "list-group-item search-result"
+            :onClick     (fn []
+                           (put!
+                            (:search-chan (om/get-shared owner))
+                            {:topic :search-click
+                             :value app}))}
+       app))))
+
+(defn result-separator-view [app owner]
+  (reify
+    om/IRenderState
+    (render-state [this state]
+      (dom/div #js {:className "list-group-separator"}))))
 
 (defn results-view [app owner]
   (reify
@@ -50,8 +56,8 @@
     om/IRenderState
     (render-state [this state]
       (apply dom/div #js {:className "list-group search-results"}
-        (om/build-all
-          result-view
-          (map
-            (fn [elem] elem)
-            (:results app)))))))
+             (om/build-all
+              result-view
+              (map
+               (fn [elem] elem)
+               (:results app)))))))

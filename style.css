@@ -22,10 +22,6 @@ a:hover {
   margin: 8px;
 }
 
-.form-control {
-
-}
-
 .search-container {
   width : 300px;
   vertical-align:top;
@@ -33,7 +29,6 @@ a:hover {
 }
 
 .search-results {
-  width: 300px;
   z-index: 10;
   position: absolute;
   cursor:pointer;
@@ -51,12 +46,18 @@ a:hover {
 }
 
 .portfolio-component {
+  padding: 0px;
 }
 
 .portfolio-graph {
   display: inline-block;
   width: 400px;
   height: 300px;
+
+}
+
+.ct-line {
+  stroke: #FF0;
 }
 
 .searchInput {
@@ -64,4 +65,8 @@ a:hover {
 
 .remove-button {
   padding: 10px;
+}
+
+.portfolio-graph .ct-line {
+stroke:rgba(0,1,0,1);
 }

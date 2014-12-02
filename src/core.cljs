@@ -6,12 +6,15 @@
     [portfolio.input :as input]
     [portfolio.components :as components]
     [portfolio.search-results :as search-results]
+    [portfolio.util :as util]
     [om.core :as om :include-macros true]
     [om.dom :as dom :include-macros true])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
-
 (def prices {"Ford Motor Co."
+               {:dates   ["2014-05-21" "2014-05-22" "2014-05-23" "2014-05-27" "2014-05-28" "2014-05-29" "2014-05-30"]
+                :prices  [15.91 15.91 16.02 16.16 16.31 16.54 16.44]}
+             "Morjens Co."
                {:dates   ["2014-05-21" "2014-05-22" "2014-05-23" "2014-05-27" "2014-05-28" "2014-05-29" "2014-05-30"]
                 :prices  [15.91 15.91 16.02 16.16 16.31 16.54 16.44]}
              "Nokia Corporation"
@@ -19,18 +22,17 @@
                 :prices  [7.62 7.80 7.84 7.86 7.85 7.92 8.13]}
              })
 
-(keys prices)
 (def app-state (atom {:results     []
-                      :components  []
+                      :components  {}
                       :data        prices}))
 
 (def search-chan (chan))
 (def notif-chan  (pub search-chan :topic))
 
-(def strinki "asdfasdfasdfadsf")
-(subs strinki 0 500)
-
-(clj->js (fn [value] (str "$ " value )))
+(defn graph-input-data
+  [input]
+  {:labels   (get-in input [:data "Ford Motor Co." :dates])
+   :series   [(get-in input [:data "Ford Motor Co." :prices])]})
 
 (defn components-view [app owner]
   (reify
@@ -42,16 +44,16 @@
             (om/build input/input-view true)
             (om/build search-results/results-view app))
           (om/build graph/graph-view
-                    (get-in app [:data "Ford Motor Co."])
+                    (graph-input-data app)
                     {:opts
-                      {:js       {}
-                       :graph    {:width 400
-                                  :height 300
-                                  :showPoint false
-                                  :axisY {
-                                    :labelInterpolationFnc (fn [value]
-                                                             (subs (str value) 0 8))}}}})
-        (om/build components/portfolio-list-view (:components app)))))))
+                      {:js          {:className "ct-chart portfolio-graph"}
+                       :graph-opts  {:width 400
+                                    :height 300
+                                    :showPoint false
+                                    :axisY {
+                                      :labelInterpolationFnc (fn [value]
+                                                               (subs (str value) 0 8))}}}})
+        (om/build components/portfolio-list-view app))))))
 
 (om/root
   components-view

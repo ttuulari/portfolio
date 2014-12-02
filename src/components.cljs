@@ -5,6 +5,7 @@
     [om.core :as om :include-macros true]
     [om.dom :as dom :include-macros true]
     [portfolio.component-row :as component-row]
+    [portfolio.search-results :as search]
     [portfolio.slider :as slider])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
@@ -39,12 +40,15 @@
           (let [[v c]            (alts! [remove-chan click-chan]
                                    {:as {:default true}})
                 add-component    (fn []
-                                   (if (some #{(:value v)} @app)
+                                   (if (contains? (:value v) (:components @app))
                                      @app
-                                     (conj @app (:value v))))
+                                     (assoc-in @app [:components (:value v)] 0)))
 
                 remove-component (fn []
-                                   (remove (fn [elem] (= elem (:value v))) @app))]
+                                   (assoc @app
+                                          :components
+                                          (dissoc (:components @app) (get-in v [:value :name]))))]
+
 
             (condp = c
               remove-chan   (om/transact! app remove-component)
@@ -56,9 +60,15 @@
     (render-state [this state]
       (dom/div #js {:className "portfolio-container"}
         (om/build portfolio-list-columns true)
-        (apply dom/div #js {:className "list-group portfolio-list"}
-          (om/build-all
-            component-row/portfolio-component-view
-            (map
-              (fn [elem] elem)
-              app)))))))
+          (apply dom/div #js {:className "list-group portfolio-list"}
+               (interleave
+                 (om/build-all
+                   component-row/portfolio-component-view
+                   (map
+                     (fn [elem] {:name   (first elem)
+                                 :amount (second elem)
+                                 :price  (last (get-in app [:data (first elem) :prices]))})
+                   (:components app)))
+                 (om/build-all
+                   search/result-separator-view
+                   (repeat (count (:components app)) nil))))))))
