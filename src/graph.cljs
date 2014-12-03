@@ -5,11 +5,12 @@
     [portfolio.util :as util]))
 
 (defn draw [element input-data opts]
-    (js/Chartist.Line.
+  (let [constructor  (:constructor opts)]
+    (constructor.
       element
       (clj->js input-data)
       (clj->js (:graph-opts opts))
-      (clj->js (:responsive-opts opts))))
+      (clj->js (:responsive-opts opts)))))
 
 (defn graph-view [app owner opts]
   (reify

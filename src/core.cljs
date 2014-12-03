@@ -62,12 +62,13 @@
                     (graph-input-data app)
                     {:opts
                       {:js          {:className "ct-chart portfolio-graph"}
+                       :constructor (.-Line js/Chartist)
                        :graph-opts  {:width 500
                                     :height 300
                                     :showPoint false
                                     :axisY {
                                       :labelInterpolationFnc (fn [value]
-                                                               (subs (str value) 0 8))}}}})
+                                                               (util/to-fixed value 2))}}}})
         (om/build components/portfolio-list-view app))))))
 
 (om/root
