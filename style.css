@@ -25,13 +25,14 @@ a:hover {
 .search-container {
   width : 300px;
   vertical-align:top;
-  display: inline-block;
+  /*display: inline-block;*/
 }
 
 .search-results {
   z-index: 10;
   position: absolute;
   cursor:pointer;
+  background: #fff;
 }
 
 .portfolio-container {
@@ -50,9 +51,13 @@ a:hover {
 }
 
 .portfolio-graph {
-  display: inline-block;
-  width: 400px;
-  height: 300px;
+  width: 500px;
+  height: 300px
+  padding: 200px;
+}
+
+.graph-slider {
+  /*display: inline-block;*/
 }
 
 .component-graph {
@@ -66,6 +71,11 @@ a:hover {
 
 .searchInput {
 }
+
+.slider-indicator{
+  display: inline-block;
+}
+
 
 .remove-button {
   padding: 10px;
