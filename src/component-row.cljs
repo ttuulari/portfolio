@@ -4,6 +4,8 @@
       :refer [<! >! chan pub put!]]
     [om.core :as om :include-macros true]
     [om.dom :as dom :include-macros true]
+    [portfolio.graph :as graph]
+    [portfolio.util :as util]
     [portfolio.slider :as slider])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
@@ -54,6 +56,10 @@
                                         :onChange      #(handle-change owner state (:name app))
                                         }))))))
 
+(defn graph-input-data [prices]
+   {:labels   (repeat (count prices) 0)
+    :series   [prices]})
+
 (defn portfolio-component-view [app owner]
   (reify
     om/IRenderState
@@ -63,5 +69,21 @@
         (dom/div #js {:className "row"}
           (dom/div #js {:className   "portfolio-list-column col-sm-2"} (:name app))
           (om/build amount-input-view app)
-          (dom/div #js {:className   "portfolio-list-column col-sm-2"} (:price app))
+          (dom/div #js {:className "portfolio-list-column col-sm-2"}
+                   (util/to-fixed (last (:prices app)) 2))
+          (dom/div #js {:className "portfolio-list-column col-sm-2"}
+                   (util/to-fixed (* (:amount app) (last (:prices app))) 2))
+          (om/build graph/graph-view
+                    (graph-input-data (:prices app))
+                    {:opts
+                      {:js          {:className "ct-chart component-graph col-sm-2"}
+                       :constructor (.-Line js/Chartist)
+                       :graph-opts  {:width 200
+                                    :height 80
+                                    :showPoint false
+                                    :lineSmooth false
+                                    :axisX {:showLabel false
+                                            :showGrid false}
+                                    :axisY {:showLabel false
+                                            :showGrid false}}}})
           (om/build remove-button-view app))))))
