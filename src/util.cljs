@@ -6,3 +6,6 @@
              v)]
     (. js/console (log (clj->js vs)))
     v))
+
+(defn to-fixed [number precision]
+  (.toFixed number precision))
