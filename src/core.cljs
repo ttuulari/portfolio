@@ -6,6 +6,8 @@
     [portfolio.input :as input]
     [portfolio.components :as components]
     [portfolio.search-results :as search-results]
+    [portfolio.slider-indicator :as indicator]
+    [portfolio.slider :as slider]
     [portfolio.util :as util]
     [om.core :as om :include-macros true]
     [om.dom :as dom :include-macros true])
@@ -22,21 +24,27 @@
                 :prices  [7.62 7.80 7.84 7.86 7.85 7.92 8.13]}
              })
 
-(def app-state (atom {:results     []
-                      :components  {}
-                      :data        prices}))
+(def app-state (atom {:selected-point   {:date "2014-05-30"}
+                      :results          []
+                      :components       {}
+                      :data             prices}))
 
 (def search-chan (chan))
 (def notif-chan  (pub search-chan :topic))
 
+(def date-labels
+  (-> @app-state
+      :data
+      first
+      second
+      :dates))
+
+(def last-date-index
+  (dec (count date-labels)))
+
 (defn graph-input-data
   [input]
-  (let [labels        (-> input
-                          :data
-                          first
-                          second
-                          :dates)
-
+  (let [labels        date-labels
         mult-price    (fn [[name amount]]
                         (map (fn [elem] (* amount elem))
                              (:prices (get (:data input) name))))
@@ -58,18 +66,32 @@
           (dom/div #js {:className "search-container"}
             (om/build input/input-view true)
             (om/build search-results/results-view app))
-          (om/build graph/graph-view
-                    (graph-input-data app)
-                    {:opts
-                      {:js          {:className "ct-chart portfolio-graph"}
-                       :constructor (.-Line js/Chartist)
-                       :graph-opts  {:width 500
-                                    :height 300
-                                    :showPoint false
-                                    :axisY {
-                                      :labelInterpolationFnc (fn [value]
-                                                               (util/to-fixed value 2))}}}})
-        (om/build components/portfolio-list-view app))))))
+          (dom/div #js {:js {:className "graph-slider"}}
+            (om/build graph/graph-view
+                      (graph-input-data app)
+                      {:opts
+                        {:js          {:className "ct-chart portfolio-graph"}
+                         :constructor (.-Line js/Chartist)
+                         :graph-opts  {:width 600
+                                      :height 300
+                                      :showPoint false
+                                      :chartPadding 20
+                                      :axisX {}
+                                      :axisY {
+                                        :labelInterpolationFnc (fn [value]
+                                                                 (util/to-fixed value 1))}}}})
+            (dom/div nil
+              (om/build indicator/slider-indicator-view app)
+              (om/build slider/slider-view
+                {:labels   date-labels}
+                {:opts
+                  {:js       {:className "slider-material-red shor col-sm-2"}
+                   :slider   {:start last-date-index
+                              :step 1
+                              :connect "lower"
+                              :range {:min 0
+                                      :max last-date-index}}}}))))
+          (om/build components/portfolio-list-view app)))))
 
 (om/root
   components-view
