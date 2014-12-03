@@ -10,7 +10,7 @@
     [portfolio.slider :as slider])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
-(def columns ["Component" "# Amount" "$ Price"])
+(def columns ["Component" "# Amount" "$ Price" "$ Total Position" "Chart"])
 
 (defn portfolio-list-column [app owner]
   (reify
@@ -76,7 +76,7 @@
                    (map
                      (fn [elem] {:name   (first elem)
                                  :amount (second elem)
-                                 :price  (last (get-in app [:data (first elem) :prices]))})
+                                 :prices  (get-in app [:data (first elem) :prices])})
                    (:components app)))
                  (om/build-all
                    search/result-separator-view
