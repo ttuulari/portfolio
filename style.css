@@ -73,9 +73,16 @@ a:hover {
 }
 
 .slider-indicator{
-  display: inline-block;
+  font-size: 8px;
 }
 
+.slider-controls {
+  padding: 10px;
+}
+
+.range-buttons {
+  padding: 10px;
+}
 
 .remove-button {
   padding: 10px;

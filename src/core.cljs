@@ -7,6 +7,7 @@
     [portfolio.components :as components]
     [portfolio.search-results :as search-results]
     [portfolio.slider-indicator :as indicator]
+    [portfolio.range-buttons :as range-buttons]
     [portfolio.slider :as slider]
     [portfolio.util :as util]
     [om.core :as om :include-macros true]
@@ -62,7 +63,7 @@
     om/IRenderState
     (render-state [this state]
       (dom/div nil
-        (dom/div nil
+        (dom/div {:className "container"}
           (dom/div #js {:className "search-container"}
             (om/build input/input-view true)
             (om/build search-results/results-view app))
@@ -76,11 +77,11 @@
                                       :height 300
                                       :showPoint false
                                       :chartPadding 20
-                                      :axisX {}
                                       :axisY {
                                         :labelInterpolationFnc (fn [value]
                                                                  (util/to-fixed value 1))}}}})
-            (dom/div nil
+            (om/build range-buttons/range-buttons-view nil)
+            (dom/div #js {:className "row slider-controls"}
               (om/build indicator/slider-indicator-view app)
               (om/build slider/slider-view
                 {:labels   date-labels}

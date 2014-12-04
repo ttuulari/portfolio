@@ -23,4 +23,4 @@
 
     om/IRenderState
     (render-state [this state]
-      (p/panel {:class "slider-indicator"} (get-in app [:selected-point :date])))))
+      (p/panel {:class "slider-indicator col-sm-1"} (get-in app [:selected-point :date])))))
