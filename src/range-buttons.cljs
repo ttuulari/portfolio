@@ -5,6 +5,7 @@
     [cljs.core.async :as async
       :refer [<! put! sub chan]]
     [om-tools.dom :as d :include-macros true]
+    [portfolio.prices :as prices]
     [portfolio.util :as util])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
@@ -12,8 +13,8 @@
   [end-date delta]
     {:end-date     end-date
      :range        delta
-     :total-length 30
-     :final-date   "2014-05-30"})
+     :total-length (prices/total-length)
+     :final-date   (prices/final-date)})
 
 (defn delta->data [delta]
   (condp = delta
