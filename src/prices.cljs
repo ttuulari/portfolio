@@ -67,3 +67,17 @@
                         126.22,  125.98,  124.17,  124.17,  124.1 ,  124.94,  124.6 ,
                         125.81,  124.77,  124.5 ,  124.58,  124.69,  124.39,  124.67,
                         124.51,  121.85,  121.2 ,  120.94,  120.43]}})
+
+(defn total-length []
+  (count (-> prices
+             first
+             second
+             :dates)))
+
+(defn final-date []
+  (-> prices
+      first
+      second
+      :dates
+      last))
+
