@@ -6,11 +6,21 @@
 
 (defn graph-input-data
   [input date-labels]
-  (let [labels        (take-nth (/ (count date-labels) 9) date-labels)
+  (let [sorted-labels (apply sorted-set date-labels)
+        sub-labels    (subseq (apply sorted-set date-labels)
+                              <=
+                              (get-in input [:selected-date :end-date]))
+        to-take       (Math/abs (get-in input [:selected-date :range]))
+        window-labels (take-last to-take sub-labels)
+        labels        (take-nth (/ (count window-labels)
+                                   (min (count window-labels) 9))
+                                window-labels)
+
         mult-price    (fn [[name amount]]
                         (map (fn [elem] (* amount elem))
-                             (:prices (get (:data input) name))))
-
+                             (take-last to-take
+                                        (take (count sub-labels)
+                                              (:prices (get (:data input) name))))))
         prices        (map mult-price (:components input))]
 
     (if (empty? prices)
