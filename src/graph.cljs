@@ -6,7 +6,7 @@
 
 (defn graph-input-data
   [input date-labels]
-  (let [labels        date-labels
+  (let [labels        (take-nth (/ (count date-labels) 9) date-labels)
         mult-price    (fn [[name amount]]
                         (map (fn [elem] (* amount elem))
                              (:prices (get (:data input) name))))

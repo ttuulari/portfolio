@@ -1,4 +1,4 @@
-(ns portfolio.core
+  (ns portfolio.core
   (:require
     [cljs.core.async :as async
       :refer [<! >! chan pub put! timeout]]
@@ -11,28 +11,18 @@
     [portfolio.portfolio-summary :as summary]
     [portfolio.slider :as slider]
     [portfolio.util :as util]
+    [portfolio.prices :as prices]
     [om.core :as om :include-macros true]
     [om-bootstrap.grid :as g]
     [om-tools.dom :as d :include-macros true])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
-
-(def prices {"Ford Motor Co."
-               {:dates   ["2014-05-21" "2014-05-22" "2014-05-23" "2014-05-27" "2014-05-28" "2014-05-29" "2014-05-30"]
-                :prices  [15.91 15.91 16.02 16.16 16.31 16.54 16.44]}
-             "Morjens Co."
-               {:dates   ["2014-05-21" "2014-05-22" "2014-05-23" "2014-05-27" "2014-05-28" "2014-05-29" "2014-05-30"]
-                :prices  [15.91 15.91 16.02 16.16 16.31 16.54 16.44]}
-             "Mokia Corporation"
-               {:dates   ["2014-05-21" "2014-05-22" "2014-05-23" "2014-05-27" "2014-05-28" "2014-05-29" "2014-05-30"]
-                :prices  [7.62 7.80 7.84 7.86 7.85 7.92 8.13]}
-             })
 
 (def range-data (range-buttons/update-range "2014-05-30" -7))
 
 (def app-state (atom {:selected-date    range-data
                       :results          []
                       :components       {}
-                      :data             prices}))
+                      :data             prices/prices}))
 
 (def search-chan (chan))
 (def notif-chan  (pub search-chan :topic))
@@ -70,9 +60,13 @@
                              :constructor (.-Line js/Chartist)
                              :graph-opts  {:width 600
                                           :height 300
+                                          :lineSmooth false
                                           :showPoint false
                                           :chartPadding 20
+                                          :axisX {
+                                            :showLabel true}
                                           :axisY {
+                                            :scaleMinSpace 50
                                             :labelInterpolationFnc (fn [value]
                                                                      (util/to-fixed value 1))}}}})
                 (g/row {}
