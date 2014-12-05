@@ -78,15 +78,11 @@
                 (g/row {}
                              (g/col {:xs 6 :md 4 :class "offset2"}
                                     (om/build slider/slider-view
-                                              {:length (get-in app [:selected-date :length])
+                                              {:length (get-in app [:selected-date :total-length])
                                                :range  (get-in app [:selected-date :range])}
                                               {:opts
-                                               {:js       {:className "slider-material-red shorf"}
-                                                :slider   {:start last-date-index
-                                                           :step 1
-                                                           :connect "lower"
-                                                           :range {:min 0
-                                                                   :max last-date-index}}}}))
+                                                 {:js
+                                                   {:className "slider-material-red shorf"}}}))
                              (g/col {:xs 6 :md 4}
                       (om/build indicator/slider-indicator-view (:selected-date app)))))))
         (d/div {:class "container portfolio-container"}

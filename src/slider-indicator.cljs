@@ -21,7 +21,7 @@
                                   (range-buttons/update-range
                                     (util/date-delta-days->str
                                       (:final-date @app)
-                                      (+ value (:range @app)))
+                                      (- value (:total-length @app)))
                                     (:range @app)))))
 
           (recur))))
@@ -34,4 +34,6 @@
                            (d/li {:class "list-group-item"}
                                  (str "End date: " (:end-date app)))
                            (d/li {:class "list-group-item"}
-                                 (str "Start date: " (:start-date app))))}))))
+                                 (str "Start date: "
+                                      (util/date-delta-days->str (:end-date app)
+                                                                 (:range app)))))}))))

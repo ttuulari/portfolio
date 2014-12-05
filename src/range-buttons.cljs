@@ -10,11 +10,10 @@
 
 (defn update-range
   [end-date delta]
-    {:end-date   end-date
-     :start-date (util/date->str (util/date-delta-days end-date delta))
-     :range      delta
-     :length     7
-     :final-date "2014-05-30"})
+    {:end-date     end-date
+     :range        delta
+     :total-length 7
+     :final-date   "2014-05-30"})
 
 (defn clicked [app owner delta]
    (let [search-chan   (:search-chan  (om/get-shared owner))]
