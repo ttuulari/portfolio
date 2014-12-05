@@ -17,7 +17,7 @@
     [om-tools.dom :as d :include-macros true])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
-(def range-data (range-buttons/update-range "2014-05-30" -7))
+(def range-data (range-buttons/update-range "2014-05-30" -30))
 
 (def app-state (atom {:selected-date    range-data
                       :results          []
