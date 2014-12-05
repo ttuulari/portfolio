@@ -76,15 +76,15 @@
                                             :labelInterpolationFnc (fn [value]
                                                                      (util/to-fixed value 1))}}}})
                 (g/row {}
-                             (g/col {:xs 6 :md 4 :class "offset2"}
-                                    (om/build slider/slider-view
-                                              {:length (get-in app [:selected-date :total-length])
-                                               :range  (get-in app [:selected-date :range])}
-                                              {:opts
-                                                 {:js
-                                                   {:className "slider-material-red shorf"}}}))
-                             (g/col {:xs 6 :md 4}
-                      (om/build indicator/slider-indicator-view (:selected-date app)))))))
+                       (g/col {:xs 6 :md 4}
+                              (om/build indicator/slider-indicator-view (:selected-date app)))
+                       (g/col {:xs 6 :md 4 :class "offset2"}
+                              (om/build slider/slider-view
+                                        {:length (get-in app [:selected-date :total-length])
+                                         :range  (get-in app [:selected-date :range])}
+                                        {:opts
+                                         {:js
+                                          {:className "slider-material-red shorf"}}}))))))
         (d/div {:class "container portfolio-container"}
           (g/row {:class "portfolio-container-row"}
               (om/build components/portfolio-list-view app))))))))
