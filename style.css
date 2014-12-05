@@ -1,10 +1,10 @@
 body {
   background: #fff;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;;
   font-size: 15px;
   line-height: 1.7;
   margin: 0;
   padding: 30px;
+  height: 500px;
 }
 
 a {
@@ -33,9 +33,6 @@ a:hover {
   position: absolute;
   cursor:pointer;
   background: #fff;
-}
-
-.portfolio-container {
 }
 
 .portfolio-list {
@@ -73,14 +70,15 @@ a:hover {
 }
 
 .slider-indicator{
-  font-size: 8px;
+  font-size: 12px;
 }
 
 .slider-controls {
-  padding: 10px;
+
 }
 
 .range-buttons {
+  width 80%;
   padding: 10px;
 }
 
@@ -104,4 +102,9 @@ stroke:rgba(0,1,0,1);
 
 .ct-chart .ct-series.ct-series-a .ct-line {
   stroke-width:2px;
+}
+
+.portfolio-summary {
+  padding: 10px;
+  height:150px;
 }

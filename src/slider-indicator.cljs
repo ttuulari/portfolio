@@ -3,9 +3,10 @@
     [cljs.core.async :as async
       :refer [<! >! chan put! sub]]
     [om.core :as om :include-macros true]
-    [om.dom :as dom :include-macros true]
     [om-bootstrap.panel :as p]
-    [portfolio.util :as util])
+    [portfolio.range-buttons :as range-buttons]
+    [portfolio.util :as util]
+    [om-tools.dom :as d :include-macros true])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
 (defn slider-indicator-view [app owner]
@@ -15,12 +16,22 @@
       (let [slide-chan       (sub (:notif-chan (om/get-shared owner)) :slide (chan) false)]
         (go-loop []
           (let [search-elem      (<! slide-chan)
-                value            (get
-                                  (get-in search-elem [:data :labels])
-                                  (int (:value search-elem)))]
-            (om/update! app [:selected-point :date] value))
+                value            (int (:value search-elem))]
+            (om/transact! app (fn []
+                                  (range-buttons/update-range
+                                    (util/date-delta-days->str
+                                      (:final-date @app)
+                                      (+ value (:range @app)))
+                                    (:range @app)))))
+
           (recur))))
 
     om/IRenderState
     (render-state [this state]
-      (p/panel {:class "slider-indicator col-sm-1"} (get-in app [:selected-point :date])))))
+      (p/panel
+        {:class "slider-indicator"
+        :list-group (d/ul {:class "list-group"}
+                           (d/li {:class "list-group-item"}
+                                 (str "End date: " (:end-date app)))
+                           (d/li {:class "list-group-item"}
+                                 (str "Start date: " (:start-date app))))}))))

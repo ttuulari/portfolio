@@ -4,6 +4,21 @@
     [om.dom :as dom :include-macros true]
     [portfolio.util :as util]))
 
+(defn graph-input-data
+  [input date-labels]
+  (let [labels        date-labels
+        mult-price    (fn [[name amount]]
+                        (map (fn [elem] (* amount elem))
+                             (:prices (get (:data input) name))))
+
+        prices        (map mult-price (:components input))]
+
+    (if (empty? prices)
+      {:labels   labels
+       :series   [(repeat (count labels) 0.0)]}
+      {:labels   labels
+       :series   [(apply map + prices)]})))
+
 (defn draw [element input-data opts]
   (let [constructor  (:constructor opts)]
     (constructor.
