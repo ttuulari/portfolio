@@ -15,26 +15,34 @@
      :total-length 30
      :final-date   "2014-05-30"})
 
+(defn delta->data [delta]
+  (condp = delta
+    -7     {:text "1 Week" :index 0}
+    -30    {:text "1 Month" :index 1}
+    -180   {:text "6 Months" :index 2}
+    -365   {:text "1 Year" :index 3}))
+
 (defn clicked [app owner delta index]
    (let [search-chan   (:search-chan  (om/get-shared owner))]
-     (om/set-state! owner :active index)
      (put! search-chan
            {:topic   :range
             :value   (update-range (:end-date app) delta)})))
 
-(defn create-button [app owner delta text index]
-  (let [button-data   {:bs-style "danger"
+(defn create-button [app owner delta]
+  (let [delta-data    (delta->data delta)
+        text          (:text delta-data)
+        index         (:index delta-data)
+        button-data   {:bs-style "danger"
+                       :bs-size "small"
                        :on-click (fn[] (clicked @app owner delta index))}
-        active        (= index (om/get-state owner :active))]
+        state-index   (:index (delta->data (:range app)))
+        active        (= index state-index)]
     (if active
       (b/button (assoc button-data :bs-style "primary") text)
       (b/button button-data text))))
 
 (defn range-buttons-view [app owner]
   (reify
-    om/IInitState
-    (init-state [_] {:active 0})
-
     om/IWillMount
     (will-mount [this]
       (let [range-chan       (sub (:notif-chan (om/get-shared owner)) :range (chan) false)]
@@ -50,7 +58,7 @@
     (render-state [this state]
       (d/div {:class "range-buttons text-center"}
       (b/toolbar {:class "col-md-1"}
-        (create-button app owner -7 "1 Week" 0)
-        (create-button app owner -30 "1 Month" 1)
-        (create-button app owner -180 "6 Months" 2)
-        (create-button app owner -365 "1 Year" 3))))))
+        (create-button app owner -7)
+        (create-button app owner -30)
+        (create-button app owner -180)
+        (create-button app owner -365))))))
