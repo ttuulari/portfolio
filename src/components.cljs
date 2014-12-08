@@ -30,6 +30,23 @@
             portfolio-list-column
             (map (fn [elem] elem) columns)))))))
 
+(defn add-component [app value]
+  (if (contains? (:components app) (:value value))
+    app
+    (assoc-in app [:components (:value value)] 0)))
+
+(defn update-component [app value]
+  (let [c-name   (get-in value [:value :name])
+        c-amount (get-in value [:value :amount])]
+    (if (contains? (:components app) c-name)
+      (assoc-in app [:components c-name] c-amount)
+      app)))
+
+(defn remove-component [app value]
+  (assoc app
+    :components
+    (dissoc (:components app) (get-in value [:value :name]))))
+
 (defn portfolio-list-view [app owner]
   (reify
     om/IWillMount
@@ -39,24 +56,11 @@
             amount-chan      (sub (:notif-chan (om/get-shared owner)) :component-amount (chan) false)]
 
         (go-loop []
-          (let [[v c]            (alts! [remove-chan click-chan amount-chan]
+          (let [[value c]            (alts! [remove-chan click-chan amount-chan]
                                    {:as {:default true}})
-                add-component    (fn []
-                                   (if (contains? (:components @app) (:value v))
-                                     @app
-                                     (assoc-in @app [:components (:value v)] 0)))
-
-                update-component    (fn []
-                                      (let [c-name   (get-in v [:value :name])
-                                            c-amount (get-in v [:value :amount])]
-                                        (if (contains? (:components @app) c-name)
-                                          (assoc-in @app [:components c-name] c-amount)
-                                          @app)))
-
-                remove-component (fn []
-                                   (assoc @app
-                                          :components
-                                          (dissoc (:components @app) (get-in v [:value :name]))))]
+                add-component    (fn [] (add-component @app value))
+                update-component (fn [] (update-component @app value))
+                remove-component (fn [] (remove-component @app value))]
 
             (condp = c
               remove-chan   (om/transact! app remove-component)
