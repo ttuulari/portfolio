@@ -6,7 +6,8 @@
     [om.dom :as dom :include-macros true]
     [portfolio.graph :as graph]
     [portfolio.util :as util]
-    [portfolio.slider :as slider])
+    [portfolio.slider :as slider]
+    [om-tools.dom :as d :include-macros true])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
 
@@ -14,7 +15,7 @@
   (reify
     om/IRenderState
     (render-state [this state]
-      (dom/a #js {:className   "btn btn-danger btn-xs remove-button"
+      (dom/a #js {:className   "btn btn-danger btn-xs remove-button  col-sm-1"
                   :onClick     (fn []
                                  (put!
                                    (:search-chan (om/get-shared owner))
@@ -45,7 +46,7 @@
 
     om/IRenderState
     (render-state [this state]
-      (dom/div #js {:className "form-group col-sm-2"}
+      (dom/div #js {:className "form-group col-sm-1"}
                (dom/div #js {:className "input-group"}
                         (dom/input #js {:className     "form-control"
                                         :type          "text"
@@ -64,26 +65,24 @@
   (reify
     om/IRenderState
     (render-state [this state]
-      (dom/div
-        #js {:className   "list-group-item portfolio-component"}
-        (dom/div #js {:className "row"}
-          (dom/div #js {:className   "portfolio-list-column col-sm-2"} (:name app))
-          (om/build amount-input-view app)
-          (dom/div #js {:className "portfolio-list-column col-sm-2"}
-                   (util/to-fixed (last (:prices app)) 2))
-          (dom/div #js {:className "portfolio-list-column col-sm-2"}
-                   (util/to-fixed (* (:amount app) (last (:prices app))) 2))
-          (om/build graph/graph-view
-                    (graph-input-data (:prices app))
-                    {:opts
-                      {:js          {:className "ct-chart component-graph col-sm-2"}
-                       :constructor (.-Line js/Chartist)
-                       :graph-opts  {:width 200
-                                    :height 80
-                                    :showPoint false
-                                    :lineSmooth false
-                                    :axisX {:showLabel false
-                                            :showGrid false}
-                                    :axisY {:showLabel false
-                                            :showGrid false}}}})
-          (om/build remove-button-view app))))))
+      (d/li {:class "list-group-item portfolio-component"}
+        (d/div {:class "portfolio-list-column col-sm-2"} (:name app))
+        (om/build amount-input-view app)
+        (d/div {:class "portfolio-list-column col-sm-1"}
+               (util/to-fixed (last (:prices app)) 2))
+        (d/div {:class "portfolio-list-column col-sm-1"}
+               (util/to-fixed (* (:amount app) (last (:prices app))) 2))
+        (om/build graph/graph-view
+                  (graph-input-data (:prices app))
+                  {:opts
+                   {:js          {:className "ct-chart component-graph col-sm-2"}
+                    :constructor (.-Line js/Chartist)
+                    :graph-opts  {:width 180
+                                  :height 80
+                                  :showPoint false
+                                  :lineSmooth false
+                                  :axisX {:showLabel false
+                                          :showGrid false}
+                                  :axisY {:showLabel false
+                                          :showGrid false}}}})
+        (om/build remove-button-view app)))))

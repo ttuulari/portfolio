@@ -23,7 +23,6 @@
                                       (:final-date @app)
                                       (- value (:total-length @app)))
                                     (:range @app)))))
-
           (recur))))
 
     om/IRenderState

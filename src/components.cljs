@@ -3,29 +3,33 @@
     [cljs.core.async :as async
       :refer [<! >! chan put! sub]]
     [om.core :as om :include-macros true]
-    [om.dom :as dom :include-macros true]
     [portfolio.util :as util]
     [portfolio.component-row :as component-row]
     [portfolio.search-results :as search]
-    [portfolio.slider :as slider])
+    [portfolio.slider :as slider]
+    [om-bootstrap.panel :as p]
+    [om-tools.dom :as d :include-macros true])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
-(def columns ["Component" "# Amount" "$ Price" "$ Total Position" "Chart"])
+(def columns [["Component" "col-sm-2"]
+              ["Amount" "col-sm-1"]
+              ["$ Price" "col-sm-1"]
+              ["$ Total Position" "col-sm-1"]
+              ["Chart" "col-sm-2"]])
 
 (defn portfolio-list-column [app owner]
   (reify
     om/IRenderState
     (render-state [this state]
-      (dom/h4
-        #js {:className   "portfolio-list-column col-sm-2"}
-        (dom/div nil app)))))
+      (d/h4 {:class   (str "portfolio-list-column " (last app))}
+            (d/div nil (first app))))))
 
 (defn portfolio-list-columns [app owner]
   (reify
     om/IRenderState
     (render-state [this state]
-      (dom/div #js {:className "portfolio-list-columns"}
-        (apply dom/div #js {:className "row"}
+      (d/div {:class "portfolio-list-columns"}
+        (d/div {:class "row"}
           (om/build-all
             portfolio-list-column
             (map (fn [elem] elem) columns)))))))
@@ -70,18 +74,18 @@
             (recur))))
 
     om/IRenderState
-    (render-state [this state]
-      (dom/div #js {:className "portfolio-container"}
-        (om/build portfolio-list-columns true)
-          (apply dom/div #js {:className "list-group portfolio-list"}
-               (interleave
-                 (om/build-all
-                   component-row/portfolio-component-view
-                   (map
-                     (fn [elem] {:name   (first elem)
-                                 :amount (second elem)
-                                 :prices  (get-in app [:data (first elem) :prices])})
-                   (:components app)))
-                 (om/build-all
-                   search/result-separator-view
-                   (repeat (count (:components app)) nil))))))))
+    (render-state
+      [this state]
+      (d/div {:class "portfolio-container"}
+             (p/panel
+               {:header (d/div nil (om/build portfolio-list-columns nil))
+                :list-group (d/ul {:class "list-group"}
+                            (om/build-all
+                              component-row/portfolio-component-view
+                              (map
+                                (fn [elem] {:name   (first elem)
+                                            :amount (second elem)
+                                            :prices  (get-in app [:data (first elem) :prices])})
+                                (:components app))))}
+              nil)))))
+

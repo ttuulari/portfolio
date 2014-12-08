@@ -40,11 +40,10 @@ a:hover {
 }
 
 .portfolio-list-column {
-/*  display: inline-block; */
+text-align: center;
 }
 
 .portfolio-component {
-  padding: 0px;
 }
 
 .portfolio-graph {
