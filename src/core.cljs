@@ -27,12 +27,7 @@
 (def search-chan (chan))
 (def notif-chan  (pub search-chan :topic))
 
-(def date-labels
-  (-> @app-state
-      :data
-      first
-      second
-      :dates))
+(def date-labels (graph/app-state->date-labels @app-state))
 
 (def last-date-index
   (dec (count date-labels)))

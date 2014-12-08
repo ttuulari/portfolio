@@ -4,23 +4,33 @@
     [om.dom :as dom :include-macros true]
     [portfolio.util :as util]))
 
-(defn graph-input-data
-  [input date-labels]
+(defn app-state->date-labels [app]
+  (-> app
+      :data
+      first
+      second
+      :dates))
+
+(defn window-input
+  [date-labels selected-date input]
   (let [sorted-labels (apply sorted-set date-labels)
         sub-labels    (subseq (apply sorted-set date-labels)
                               <=
-                              (get-in input [:selected-date :end-date]))
-        to-take       (Math/abs (get-in input [:selected-date :range]))
-        window-labels (take-last to-take sub-labels)
+                              (:end-date selected-date))
+        to-take       (Math/abs (:range selected-date))]
+    (take-last to-take (take (count sub-labels) input))))
+
+(defn graph-input-data
+  [input date-labels]
+  (let [window-labels (window-input date-labels (:selected-date input) date-labels)
         labels        (take-nth (/ (count window-labels)
                                    (min (count window-labels) 9))
                                 window-labels)
-
         mult-price    (fn [[name amount]]
                         (map (fn [elem] (* amount elem))
-                             (take-last to-take
-                                        (take (count sub-labels)
-                                              (:prices (get (:data input) name))))))
+                             (window-input date-labels
+                                           (:selected-date input)
+                                           (:prices (get (:data input) name)))))
         prices        (map mult-price (:components input))]
 
     (if (empty? prices)
