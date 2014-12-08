@@ -5,21 +5,20 @@
     [om.core :as om :include-macros true]
     [om-bootstrap.panel :as p]
     [portfolio.util :as util]
+    [portfolio.price-utils :as price]
+    [portfolio.prices :as prices-db]
     [portfolio.graph :as graph]
     [om-tools.dom :as d :include-macros true])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
-(defn yield [first-price last-price]
-  (if (zero? last-price)
-    0
-    (/ last-price first-price)))
-
 (defn build-summary
-  [prices]
+  [prices index]
     {:value   (last prices)
-     :yield   (yield
+     :yield   (price/yield
                 (first prices)
-                (last prices))})
+                (last prices))
+     :std     (price/sample-std (price/difference-seq prices))
+     :sharpe  (price/sharpe (price/difference-seq prices) (price/difference-seq index))})
 
 (defn portolio-summary-data
   [input]
@@ -33,31 +32,57 @@
                         (apply map + prices))
         window-prices (graph/window-input (graph/app-state->date-labels input)
                                           (:selected-date input)
-                                          total-prices)]
-    (if (empty? window-prices)
-      {:value   0.0
-       :yield   0.0}
-      (build-summary window-prices))))
+                                          total-prices)
+        window-index  (graph/window-input (graph/app-state->date-labels input)
+                                          (:selected-date input)
+                                          prices-db/index)]
+    (when (not (empty? window-prices))
+      (build-summary window-prices window-index))))
+
+(defn summary-items [selected-date data]
+  (let [base   [{:topic "End date: "   :value (:end-date selected-date)}
+                {:topic "Start date: " :value (util/date-delta-days->str (:end-date selected-date)
+                                                                         (:range selected-date))}]]
+       (cond-> base
+               (and (contains? data :value) (not (zero? (:value data))))
+               (conj base
+                     {:topic "Value $ "
+                      :value (util/to-fixed (:value data) 2)})
+
+               (and (contains? data :yield) (not (zero? (:yield data))))
+               (conj base
+                     {:topic "Yield % "
+                      :value (util/to-fixed (:yield data) 2)})
+
+               (and (contains? data :std) (not (js/isNaN (:std data))))
+               (conj base
+                     {:topic "Return STD "
+                      :value (util/to-fixed (:std data) 4)})
+
+               (and (contains? data :sharpe) (not (js/isNaN (:sharpe data))))
+               (conj base
+                     {:topic "Sharpe "
+                      :value (util/to-fixed (:sharpe data) 4)})
+               )))
+
+
+(defn summary-row-view [app owner]
+  (reify
+    om/IRenderState
+    (render-state [this state]
+                  (d/li {:class "list-group-item"}
+                        (str (:topic app) (:value app))))))
 
 (defn portfolio-summary-view [app owner]
   (reify
     om/IRenderState
     (render-state [this state]
     (let [data           (portolio-summary-data app)
-          selected-date  (:selected-date app)]
+          selected-date  (:selected-date app)
+          rows           (summary-items selected-date data)]
       (d/div {:class "portfolio-summary"}
              (p/panel
               {:header "Your Portfolio"
                :list-group (d/ul {:class "list-group"}
-                                 (d/li {:class "list-group-item"}
-                                       (str "End date: " (:end-date selected-date)))
-                                 (d/li {:class "list-group-item"}
-                                       (str "Start date: "
-                                       (util/date-delta-days->str (:end-date selected-date)
-                                                                  (:range selected-date))))
-                                 (d/li {:class "list-group-item"}
-                                       (str "Value $ " (util/to-fixed (:value data) 2)))
-                                 (d/li {:class "list-group-item"}
-                                       (str "Yield % " (util/to-fixed (:yield data) 2)))
-                                 )}
+                                 (om/build-all summary-row-view rows))}
               nil))))))

@@ -27,6 +27,12 @@
 (def search-chan (chan))
 (def notif-chan  (pub search-chan :topic))
 
+(defn sample-variance [coll]
+  (let [avg     (average coll)
+        diffs   (map (fn [e] (- e avg)) coll)
+        squared (map (fn [e] (* e e)) diffs)]
+    (/ (reduce + squared) (- (count coll) 1))))
+
 (def date-labels (graph/app-state->date-labels @app-state))
 
 (def last-date-index
