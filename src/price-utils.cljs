@@ -30,7 +30,5 @@
         diff        (map - diff-coll diff-index)
         e-diff      (average diff)
         std-diff    (Math.pow (sample-variance diff) 0.5)]
-    (util/log (count coll))
-    (util/log (count index-coll))
     (/ e-diff std-diff)))
 
