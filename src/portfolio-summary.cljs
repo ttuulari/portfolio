@@ -13,12 +13,13 @@
 
 (defn build-summary
   [prices index]
-    {:value   (last prices)
-     :yield   (price/yield
-                (first prices)
-                (last prices))
-     :std     (price/sample-std (price/difference-seq prices))
-     :sharpe  (price/sharpe (price/difference-seq prices) (price/difference-seq index))})
+    {:value         (last prices)
+     :yield         (price/yield
+                      (first prices)
+                      (last prices))
+     :std           (price/sample-std (price/return-ratio prices))
+     :sharpe        (price/sharpe (price/return-ratio prices) (price/return-ratio index))
+     :pain-to-gain  (price/gain-to-pain prices)})
 
 (defn portolio-summary-data
   [input]
@@ -63,6 +64,11 @@
                (conj base
                      {:topic "Sharpe "
                       :value (util/to-fixed (:sharpe data) 4)})
+
+               (and (contains? data :pain-to-gain) (not (js/isNaN (:pain-to-gain data))))
+               (conj base
+                     {:topic "Gain-to-pain "
+                      :value (util/to-fixed (:pain-to-gain data) 4)})
                )))
 
 
