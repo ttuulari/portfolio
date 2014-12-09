@@ -3,7 +3,6 @@ body {
   font-size: 15px;
   line-height: 1.7;
   margin: 0;
-  padding: 30px;
   height: 500px;
 }
 
@@ -111,4 +110,14 @@ stroke:rgba(0,1,0,1);
 
 .range-slider {
  text-align: center;
+}
+
+.portfolio-list-columns {
+  font-size: 12px;
+}
+
+.dropdown-menu
+{
+  z-index: 11;
+  position: absolute;
 }

@@ -21,7 +21,7 @@
   (reify
     om/IRenderState
     (render-state [this state]
-      (d/h4 {:class   (str "portfolio-list-column " (last app))}
+      (d/h5 {:class   (str "portfolio-list-column " (last app))}
             (d/div nil (first app))))))
 
 (defn portfolio-list-columns [app owner]

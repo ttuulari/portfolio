@@ -6,9 +6,9 @@
     [portfolio.input :as input]
     [portfolio.components :as components]
     [portfolio.search-results :as search-results]
-    [portfolio.slider-indicator :as indicator]
     [portfolio.range-buttons :as range-buttons]
     [portfolio.portfolio-summary :as summary]
+    [portfolio.navbar :as navbar]
     [portfolio.slider :as slider]
     [portfolio.util :as util]
     [portfolio.prices :as prices]
@@ -37,6 +37,7 @@
     om/IRenderState
     (render-state [this state]
       (d/div {:class "grids-examples"}
+        (om/build navbar/navbar-view true)
         (g/grid {}
           (g/row {:class "show-grid"}
             (g/col {:xs 6 :md 4}
