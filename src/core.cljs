@@ -27,12 +27,6 @@
 (def search-chan (chan))
 (def notif-chan  (pub search-chan :topic))
 
-(defn sample-variance [coll]
-  (let [avg     (average coll)
-        diffs   (map (fn [e] (- e avg)) coll)
-        squared (map (fn [e] (* e e)) diffs)]
-    (/ (reduce + squared) (- (count coll) 1))))
-
 (def date-labels (graph/app-state->date-labels @app-state))
 
 (def last-date-index
@@ -52,8 +46,6 @@
                 (om/build summary/portfolio-summary-view app)))
             (g/col {:xs 12 :md 8}
               (d/div {:class "graph-slider"}
-                (om/build range-buttons/range-buttons-view
-                          (:selected-date app))
                 (om/build graph/graph-view
                           (graph/graph-input-data app date-labels)
                           {:opts
@@ -70,16 +62,16 @@
                                             :scaleMinSpace 50
                                             :labelInterpolationFnc (fn [value]
                                                                      (util/to-fixed value 1))}}}})
-                (g/row {}
-                       (g/col {:xs 6 :md 4}
-                              (om/build indicator/slider-indicator-view (:selected-date app)))
-                       (g/col {:xs 6 :md 4 :class "offset2"}
-                              (om/build slider/slider-view
-                                        {:length (get-in app [:selected-date :total-length])
-                                         :range  (get-in app [:selected-date :range])}
-                                        {:opts
-                                         {:js
-                                          {:className "slider-material-red shorf"}}}))))))
+                (om/build range-buttons/range-buttons-view
+                          (:selected-date app))
+
+                (d/div {}
+                       (om/build slider/slider-view
+                                 {:length (get-in app [:selected-date :total-length])
+                                  :range  (get-in app [:selected-date :range])}
+                                 {:opts
+                                  {:js
+                                   {:className "slider-material-red shorf range-slider"}}})))))
         (d/div {:class "container portfolio-container"}
           (g/row {:class "portfolio-container-row"}
               (om/build components/portfolio-list-view app))))))))

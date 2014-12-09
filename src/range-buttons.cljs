@@ -46,13 +46,24 @@
   (reify
     om/IWillMount
     (will-mount [this]
-      (let [range-chan       (sub (:notif-chan (om/get-shared owner)) :range (chan) false)]
+      (let [range-chan       (sub (:notif-chan (om/get-shared owner)) :range (chan) false)
+            slide-chan       (sub (:notif-chan (om/get-shared owner)) :slide (chan) false)]
         (go-loop []
-          (let [range-elem      (<! range-chan)
-                update-state    (fn [] (update-range
-                                         (get-in range-elem [:value :final-date])
-                                         (get-in range-elem [:value :range])))]
-            (om/transact! app update-state))
+          (let [[v c]           (alts! [range-chan slide-chan])
+                range-update    (fn [] (update-range
+                                         (get-in v [:value :final-date])
+                                         (get-in v [:value :range])))
+                int-value       (int (:value v))
+                slide-update    (fn []
+                                  (update-range
+                                    (util/date-delta-days->str
+                                      (:final-date @app)
+                                      (- int-value (:total-length @app)))
+                                    (:range @app)))]
+
+            (condp = c
+              range-chan   (om/transact! app range-update)
+              slide-chan   (om/transact! app slide-update)))
           (recur))))
 
     om/IRenderState
