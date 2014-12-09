@@ -108,3 +108,7 @@ stroke:rgba(0,1,0,1);
   padding: 10px;
   height:150px;
 }
+
+.range-slider {
+ text-align: center;
+}
