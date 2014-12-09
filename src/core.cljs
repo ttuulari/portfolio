@@ -35,47 +35,51 @@
 (defn components-view [app owner]
   (reify
     om/IRenderState
-    (render-state [this state]
-      (d/div {:class "grids-examples"}
-        (om/build navbar/navbar-view true)
-        (g/grid {}
-          (g/row {:class "show-grid"}
-            (g/col {:xs 6 :md 4}
-              (d/div {:class "search-container"}
-                (om/build input/input-view true)
-                (om/build search-results/results-view app)
-                (om/build summary/portfolio-summary-view app)))
-            (g/col {:xs 12 :md 8}
-              (d/div {:class "graph-slider"}
-                (om/build graph/graph-view
-                          (graph/graph-input-data app date-labels)
-                          {:opts
-                            {:js          {:className "ct-chart portfolio-graph"}
-                             :constructor (.-Line js/Chartist)
-                             :graph-opts  {:width 600
-                                          :height 300
-                                          :lineSmooth false
-                                          :showPoint false
-                                          :chartPadding 20
-                                          :axisX {
-                                            :showLabel true}
-                                          :axisY {
-                                            :scaleMinSpace 50
-                                            :labelInterpolationFnc (fn [value]
-                                                                     (util/to-fixed value 1))}}}})
-                (om/build range-buttons/range-buttons-view
-                          (:selected-date app))
-
-                (d/div {}
-                       (om/build slider/slider-view
-                                 {:length (get-in app [:selected-date :total-length])
-                                  :range  (get-in app [:selected-date :range])}
-                                 {:opts
-                                  {:js
-                                   {:className "slider-material-red shorf range-slider"}}})))))
-        (d/div {:class "container portfolio-container"}
-          (g/row {:class "portfolio-container-row"}
-              (om/build components/portfolio-list-view app))))))))
+    (render-state
+     [this state]
+     (d/div
+      {:class "grids-examples"}
+      (om/build navbar/navbar-view true)
+      (g/grid
+       {}
+       (g/row {:class "show-grid"}
+              (g/col {:xs 6 :md 4}
+                     (d/div {:class "summary-container"}
+                            (om/build summary/portfolio-summary-view app)))
+              (g/col {:xs 12 :md 8}
+                     (d/div {:class "graph-slider"}
+                            (om/build graph/graph-view
+                                      (graph/graph-input-data app date-labels)
+                                      {:opts
+                                       {:js          {:className "ct-chart portfolio-graph"}
+                                        :constructor (.-Line js/Chartist)
+                                        :graph-opts  {:width 600
+                                                      :height 300
+                                                      :lineSmooth false
+                                                      :showPoint false
+                                                      :chartPadding 20
+                                                      :axisX {
+                                                              :showLabel true}
+                                                      :axisY {
+                                                              :scaleMinSpace 50
+                                                              :labelInterpolationFnc (fn [value]
+                                                                                       (util/to-fixed value 1))}}}})
+                            (om/build slider/slider-view
+                                      {:length (get-in app [:selected-date :total-length])
+                                       :range  (get-in app [:selected-date :range])}
+                                      {:opts
+                                       {:js
+                                        {:className "slider-material-red shorf range-slider"}}})
+                            (om/build range-buttons/range-buttons-view
+                                      (:selected-date app)))))
+       (g/row {:class "show-grid"}
+              (g/col {:xs 6 :md 4}
+                     (d/div {:class "search-container"}
+                            (om/build input/input-view true)
+                            (om/build search-results/results-view app))))
+       (d/div {:class "container portfolio-container"}
+              (g/row {:class "portfolio-container-row"}
+                     (om/build components/portfolio-list-view app))))))))
 
 (om/root
   components-view
