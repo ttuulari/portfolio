@@ -10,7 +10,17 @@
     om/IRenderState
     (render-state [this state]
       (d/div {:class "navbar navbar-danger"}
+             (d/div {:class "navbar-header"}
+                    (d/b {:type "button"
+                          :class "navbar-toggle"
+                          :data-toggle "collapse"
+                          :data-target ".navbar-responsive-collapse"})
+                    (d/a {:class "navbar-brand"} "Portfol.io"))
              (d/div {:class "navbar-collapse collapse navbar-responsive-collapse"}
-                    (d/a {:class "navbar-brand"} "Portfol.io"))))))
+                    (d/ul {:class "nav navbar-nav"}
+                          (d/li {:className "dropdown"}
+                                (d/a {:class "dropdown-toggle"
+                                      :data-toggle "dropdown"}
+                                     (d/b {:class "mdi-navigation-menu"})))))))))
 
 
