@@ -15,7 +15,8 @@
               ["Amount" "col-sm-1"]
               ["$ Price" "col-sm-1"]
               ["$ Total Position" "col-sm-1"]
-              ["Chart" "col-sm-2"]])
+              ["Chart" "col-sm-2"]
+              ["Compare" "col-sm-1"]])
 
 (defn portfolio-list-column [app owner]
   (reify
