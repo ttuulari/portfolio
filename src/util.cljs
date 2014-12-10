@@ -7,8 +7,6 @@
     (. js/console (log (clj->js vs)))
     v))
 
-(max 1 2)
-
 (defn to-fixed [number precision]
   (.toFixed number precision))
 
@@ -32,3 +30,6 @@
 
 (defn date-delta-days->str [date-string delta-days]
   (date->str (date-delta-days date-string delta-days)))
+
+(defn strip [coll chars]
+  (apply str (remove #((set chars) %) coll)))
