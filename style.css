@@ -23,8 +23,7 @@ a:hover {
 
 .search-container {
   width : 300px;
-  vertical-align:top;
-  /*display: inline-block;*/
+  padding: 20px;
 }
 
 .search-results {
@@ -39,7 +38,9 @@ a:hover {
 }
 
 .portfolio-list-column {
-text-align: center;
+  display:inline-block;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .portfolio-component {
