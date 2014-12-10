@@ -25,7 +25,11 @@
 
 
 (defn parse-input-num [elem]
-  (apply str (filter (fn [c] (not (js/isNaN c))) (.trim elem))))
+  (-> elem
+      .trim
+      util/filter-nans
+      (util/strip " ")
+      (util/l-trim "0")))
 
 (defn handle-change
   "Grab the input element via the `input` reference."
@@ -35,15 +39,12 @@
         data          {:topic :component-amount
                        :value {:name component-name
                                :amount value}}]
+    (set! (.-value (om/get-node owner "term")) value)
     (put! search-chan data)
-    (om/set-state! owner :text value)
     false))
 
 (defn amount-input-view [app owner]
   (reify
-    om/IInitState
-    (init-state [_] {:text ""})
-
     om/IRenderState
     (render-state [this state]
       (dom/div #js {:className "form-group col-sm-1"}
@@ -52,7 +53,7 @@
                                         :type          "text"
                                         :autoComplete  "off"
                                         :ref           "term"
-                                        :value         (:text state)
+                                        :value         (:amount app)
                                         :placeholder   (:amount app)
                                         :onChange      #(handle-change owner state (:name app))
                                         }))))))
