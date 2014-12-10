@@ -41,9 +41,9 @@
       (build-summary window-prices window-index))))
 
 (defn summary-items [selected-date data]
-  (let [base   [{:topic "End date: "   :value (:end-date selected-date)}
-                {:topic "Start date: " :value (util/date-delta-days->str (:end-date selected-date)
-                                                                         (:range selected-date))}]]
+  (let [base   [{:topic "Start date: " :value (util/date-delta-days->str (:end-date selected-date)
+                                                                         (:range selected-date))}
+                {:topic "End date: "   :value (:end-date selected-date)}]]
        (cond-> base
                (and (contains? data :value) (not (zero? (:value data))))
                (conj base
@@ -77,7 +77,9 @@
     om/IRenderState
     (render-state [this state]
                   (d/li {:class "list-group-item"}
-                        (str (:topic app) (:value app))))))
+                        (d/div {:class "row"}
+                               (d/div {:class "col-sm-5"} (:topic app))
+                               (d/div {:class "col-sm-6"} (:value app)))))))
 
 (defn portfolio-summary-view [app owner]
   (reify
