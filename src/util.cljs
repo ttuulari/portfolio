@@ -33,3 +33,11 @@
 
 (defn strip [coll chars]
   (apply str (remove #((set chars) %) coll)))
+
+(defn l-trim [string character]
+  (let [rgx-trim   (js/RegExp. (str "^" character "+"))]
+    (.replace string rgx-trim, "")))
+
+(defn filter-nans [string]
+  (apply str (filter (fn [c] (not (js/isNaN c))) string)))
+
