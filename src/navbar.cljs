@@ -9,7 +9,7 @@
   (reify
     om/IRenderState
     (render-state [this state]
-      (d/div {:class "navbar navbar-danger"}
+      (d/div {:class "navbar navbar-info"}
              (d/div {:class "navbar-header"}
                     (d/b {:type "button"
                           :class "navbar-toggle"
