@@ -54,25 +54,35 @@
     :components
     (dissoc (:components app) (get-in value [:value :name]))))
 
+(defn compare-component [app value]
+  (let [c-name   (get-in value [:value :name])
+        current  (get-in app [:components c-name :selected])]
+    (if (contains? (:components app) c-name)
+      (assoc-in app [:components c-name :selected] (not current))
+      app)))
+
 (defn portfolio-list-view [app owner]
   (reify
     om/IWillMount
     (will-mount [this]
       (let [click-chan       (sub (:notif-chan (om/get-shared owner)) :search-click (chan) false)
             remove-chan      (sub (:notif-chan (om/get-shared owner)) :remove-click (chan) false)
+            compare-chan     (sub (:notif-chan (om/get-shared owner)) :compare-click (chan) false)
             amount-chan      (sub (:notif-chan (om/get-shared owner)) :component-amount (chan) false)]
 
         (go-loop []
-          (let [[value c]            (alts! [remove-chan click-chan amount-chan]
+          (let [[value c]          (alts! [remove-chan click-chan amount-chan compare-chan]
                                    {:as {:default true}})
-                add-component    (fn [] (add-component @app value))
-                update-component (fn [] (update-component @app value))
-                remove-component (fn [] (remove-component @app value))]
+                compare-component  (fn [] (compare-component @app value))
+                add-component      (fn [] (add-component @app value))
+                update-component   (fn [] (update-component @app value))
+                remove-component   (fn [] (remove-component @app value))]
 
             (condp = c
               remove-chan   (om/transact! app remove-component)
               click-chan    (om/transact! app add-component)
               amount-chan   (om/transact! app update-component)
+              compare-chan  (om/transact! app compare-component)
               :default      nil))
             (recur))))
 
