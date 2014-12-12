@@ -8,7 +8,7 @@
   "dependencies": {},
   "devDependencies": {
     "nouislider": "~7.0.9",
-    "react": "~0.12.1",
+    "react": "~0.11.2",
     "chartist": "~0.4.4",
     "bootstrap-material-design": "~0.2.1"
   }
