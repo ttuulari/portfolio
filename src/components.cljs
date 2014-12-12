@@ -37,13 +37,16 @@
 (defn add-component [app value]
   (if (contains? (:components app) (:value value))
     app
-    (assoc-in app [:components (:value value)] 0)))
+    (assoc-in app
+              [:components (:value value)]
+              {:amount 0
+               :selected: false})))
 
 (defn update-component [app value]
   (let [c-name   (get-in value [:value :name])
         c-amount (get-in value [:value :amount])]
     (if (contains? (:components app) c-name)
-      (assoc-in app [:components c-name] c-amount)
+      (assoc-in app [:components c-name :amount] c-amount)
       app)))
 
 (defn remove-component [app value]
@@ -83,10 +86,11 @@
                             (om/build-all
                               component-row/portfolio-component-view
                               (map
-                                (fn [elem] {:name     (first elem)
-                                            :amount   (second elem)
-                                            :selected false
-                                            :prices   (get-in app [:data (first elem) :prices])})
+                                (fn [elem]
+                                  {:name     (first elem)
+                                   :amount   (:amount (second elem))
+                                   :selected (:selected (second elem))
+                                   :prices   (get-in app [:data (first elem) :prices])})
                                 (:components app))))}
               nil)))))
 

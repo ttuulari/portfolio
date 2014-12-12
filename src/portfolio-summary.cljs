@@ -23,8 +23,8 @@
 
 (defn portolio-summary-data
   [input]
-  (let [mult-price    (fn [[name amount]]
-                        (map (fn [elem] (* amount elem))
+  (let [mult-price    (fn [[name data]]
+                        (map (fn [elem] (* (:amount data) elem))
                              (:prices (get-in input [:data name]))))
 
         prices        (map mult-price (:components input))

@@ -69,11 +69,13 @@
                                      :value app}))}]
     (if (:selected app)
       (assoc button-data :class
-        (clojure.string/join " "
-                             (concat base-class ["btn-info"])))
+        (clojure.string/join
+         " "
+         (concat base-class ["btn-info"])))
       (assoc button-data :class
-        (clojure.string/join " "
-                             (concat base-class ["btn-primary" "btn-raised"]))))))
+        (clojure.string/join
+         " "
+         (concat base-class ["btn-primary" "btn-raised"]))))))
 
 (defn button-text [app]
   (if (:selected app)

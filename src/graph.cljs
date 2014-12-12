@@ -26,8 +26,8 @@
         labels        (take-nth (/ (count window-labels)
                                    (min (count window-labels) 9))
                                 window-labels)
-        mult-price    (fn [[name amount]]
-                        (map (fn [elem] (* amount elem))
+        mult-price    (fn [[name data]]
+                        (map (fn [elem] (* (:amount data) elem))
                              (window-input date-labels
                                            (:selected-date input)
                                            (:prices (get (:data input) name)))))
