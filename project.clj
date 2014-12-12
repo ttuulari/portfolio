@@ -8,7 +8,7 @@
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/clojurescript "0.0-2322"]
                  [org.clojure/core.async "0.1.267.0-0d7780-alpha"]
-                 [racehub/om-bootstrap "0.3.1"]
+                 [racehub/om-bootstrap "0.3.2"]
                  [om "0.7.3"]
                  [jayq "2.5.2"]]
 
@@ -23,8 +23,4 @@
                 :output-to "portfolio.js"
                 :output-dir "out"
                 :optimizations :none
-                :externs ["chartist.js"
-                          "lib/lib.js"
-                          "lib/flotr2.js"
-                          ]
                 :source-map true}}]})
