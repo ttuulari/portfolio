@@ -10,19 +10,17 @@
     [om-tools.dom :as d :include-macros true])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
-
 (defn remove-button-view [app owner]
   (reify
     om/IRenderState
     (render-state [this state]
-      (dom/a #js {:className   "btn btn-primary btn-xs remove-button  col-sm-1"
-                  :onClick     (fn []
-                                 (put!
-                                   (:search-chan (om/get-shared owner))
-                                   {:topic :remove-click
-                                    :value app}))}
-        "Remove"))))
-
+                  (d/a {:class   "btn btn-danger btn-xs remove-button  col-sm-1"
+                        :on-click     (fn []
+                                        (put!
+                                         (:search-chan (om/get-shared owner))
+                                         {:topic :remove-click
+                                          :value app}))}
+                       "Remove"))))
 
 (defn parse-input-num [elem]
   (-> elem
@@ -65,40 +63,39 @@
 (defn togglebutton-view [app owner]
   (reify
     om/IRenderState
-    (render-state
-     [this state]
-     (d/div {:class "form-container col-sm-1"}
-            (d/form {:class "horizontal"}
-                    (d/fieldset
-                     (d/div {:class "form-group"}
-                            (d/div {:class "togglebutton"}
-                                   (d/label
-                                    (d/input {:type "checkbox"
-                                              :onClick (fn [] (util/log "moro!"))}))))))))))
+    (render-state [this state]
+                  (d/a {:class   "btn btn-primary btn-xs remove-button  col-sm-1"
+                        :on-click     (fn []
+                                        (put!
+                                         (:search-chan (om/get-shared owner))
+                                         {:topic :compare-click
+                                          :value app}))}
+                       "Compare"))))
 
 (defn portfolio-component-view [app owner]
   (reify
     om/IRenderState
     (render-state [this state]
-      (d/li {:class "list-group-item portfolio-component"}
-        (d/div {:class "portfolio-list-column col-sm-2"} (:name app))
-        (om/build amount-input-view app)
-        (d/div {:class "portfolio-list-column col-sm-1"}
-               (util/to-fixed (last (:prices app)) 2))
-        (d/div {:class "portfolio-list-column col-sm-1"}
-               (util/to-fixed (* (:amount app) (last (:prices app))) 2))
-        (om/build graph/graph-view
-                  (graph-input-data (:prices app))
-                  {:opts
-                   {:js          {:className "ct-chart component-graph col-sm-2"}
-                    :constructor (.-Line js/Chartist)
-                    :graph-opts  {:width 180
-                                  :height 80
-                                  :showPoint false
-                                  :lineSmooth false
-                                  :axisX {:showLabel false
-                                          :showGrid false}
-                                  :axisY {:showLabel false
-                                          :showGrid false}}}})
-        (om/build togglebutton-view true)
-        (om/build remove-button-view app)))))
+                  (d/li {:class "list-group-item portfolio-component"}
+                        (d/div {:class "portfolio-list-column col-sm-2"} (:name app))
+                        (om/build amount-input-view app)
+                        (d/div {:class "portfolio-list-column col-sm-1"}
+                               (util/to-fixed (last (:prices app)) 2))
+                        (d/div {:class "portfolio-list-column col-sm-1"}
+                               (util/to-fixed (* (:amount app) (last (:prices app))) 2))
+                        (om/build graph/graph-view
+                                  (graph-input-data (:prices app))
+                                  {:opts
+                                   {:js          {:className "ct-chart component-graph col-sm-2"}
+                                    :constructor (.-Line js/Chartist)
+                                    :graph-opts  {:width 180
+                                                  :height 80
+                                                  :showPoint false
+                                                  :lineSmooth false
+                                                  :axisX {:showLabel false
+                                                          :showGrid false}
+                                                  :axisY {:showLabel false
+                                                          :showGrid false}}}})
+                        (om/build togglebutton-view app)
+                        (om/build remove-button-view app)))))
+
