@@ -33,13 +33,13 @@
   (let [delta-data    (delta->data delta)
         text          (:text delta-data)
         index         (:index delta-data)
-        button-data   {:bs-style "danger"
+        button-data   {:bs-style "primary"
                        :bs-size "small"
                        :on-click (fn[] (clicked @app owner delta index))}
         state-index   (:index (delta->data (:range app)))
         active        (= index state-index)]
     (if active
-      (b/button (assoc button-data :bs-style "primary") text)
+      (b/button (assoc button-data :bs-style "info") text)
       (b/button button-data text))))
 
 (defn range-buttons-view [app owner]

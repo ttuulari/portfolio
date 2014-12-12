@@ -15,7 +15,7 @@
   (reify
     om/IRenderState
     (render-state [this state]
-      (dom/a #js {:className   "btn btn-danger btn-xs remove-button  col-sm-1"
+      (dom/a #js {:className   "btn btn-primary btn-xs remove-button  col-sm-1"
                   :onClick     (fn []
                                  (put!
                                    (:search-chan (om/get-shared owner))
@@ -62,6 +62,20 @@
    {:labels   (repeat (count prices) 0)
     :series   [prices]})
 
+(defn togglebutton-view [app owner]
+  (reify
+    om/IRenderState
+    (render-state
+     [this state]
+     (d/div {:class "form-container col-sm-1"}
+            (d/form {:class "horizontal"}
+                    (d/fieldset
+                     (d/div {:class "form-group"}
+                            (d/div {:class "togglebutton"}
+                                   (d/label
+                                    (d/input {:type "checkbox"
+                                              :onClick (fn [] (util/log "moro!"))}))))))))))
+
 (defn portfolio-component-view [app owner]
   (reify
     om/IRenderState
@@ -86,4 +100,5 @@
                                           :showGrid false}
                                   :axisY {:showLabel false
                                           :showGrid false}}}})
+        (om/build togglebutton-view true)
         (om/build remove-button-view app)))))
