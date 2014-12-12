@@ -60,17 +60,32 @@
    {:labels   (repeat (count prices) 0)
     :series   [prices]})
 
+(defn button-data [owner app]
+  (let [base-class   ["btn" "btn-xs" "remove-button" "col-sm-1"]
+        button-data  {:on-click  (fn []
+                                   (put!
+                                    (:search-chan (om/get-shared owner))
+                                    {:topic :compare-click
+                                     :value app}))}]
+    (if (:selected app)
+      (assoc button-data :class
+        (clojure.string/join " "
+                             (concat base-class ["btn-info"])))
+      (assoc button-data :class
+        (clojure.string/join " "
+                             (concat base-class ["btn-primary" "btn-raised"]))))))
+
+(defn button-text [app]
+  (if (:selected app)
+    "Deselect"
+    "Compare"))
+
 (defn togglebutton-view [app owner]
   (reify
     om/IRenderState
-    (render-state [this state]
-                  (d/a {:class   "btn btn-primary btn-xs remove-button  col-sm-1"
-                        :on-click     (fn []
-                                        (put!
-                                         (:search-chan (om/get-shared owner))
-                                         {:topic :compare-click
-                                          :value app}))}
-                       "Compare"))))
+    (render-state
+     [this state]
+     (d/a (button-data owner app) (button-text app)))))
 
 (defn portfolio-component-view [app owner]
   (reify
