@@ -14,9 +14,8 @@
 (def columns [["Component" "col-sm-2"]
               ["Amount" "col-sm-1"]
               ["$ Price" "col-sm-1"]
-              ["$ Total Position" "col-sm-1"]
-              ["Chart" "col-sm-2"]
-              ["Compare" "col-sm-1"]])
+              ["$ Position" "col-sm-1"]
+              ["Chart" "col-sm-2"]])
 
 (defn portfolio-list-column [app owner]
   (reify
@@ -84,9 +83,10 @@
                             (om/build-all
                               component-row/portfolio-component-view
                               (map
-                                (fn [elem] {:name   (first elem)
-                                            :amount (second elem)
-                                            :prices  (get-in app [:data (first elem) :prices])})
+                                (fn [elem] {:name     (first elem)
+                                            :amount   (second elem)
+                                            :selected false
+                                            :prices   (get-in app [:data (first elem) :prices])})
                                 (:components app))))}
               nil)))))
 
