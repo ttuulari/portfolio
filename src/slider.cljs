@@ -2,7 +2,7 @@
   (:require
     [portfolio.util :as util]
     [om.core :as om :include-macros true]
-    [om.dom :as dom :include-macros true]
+    [om-tools.dom :as d :include-macros true]
     [cljs.core.async :as async
       :refer [put!]])
   (:use [jayq.core :only [$]]))
@@ -41,4 +41,4 @@
 
     om/IRenderState
     (render-state [this state]
-      (dom/div (clj->js (:js opts))))))
+      (d/div (clj->js (:js opts))))))
