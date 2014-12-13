@@ -5,7 +5,10 @@
 (defn yield [first-price last-price]
   (if (zero? last-price)
     0
-    (/ last-price first-price)))
+    (-> last-price
+        (/ first-price)
+        (- 1)
+        (* 100))))
 
 (defn average [coll]
   (/ (reduce + coll) (count coll)))
@@ -43,3 +46,6 @@
         neq    (Math.abs (reduce + (filter (fn [e] (< e 0)) diff)))]
     (/ pos neq)))
 
+(defn all-zeros? [seq]
+  (= (count (filter zero? seq))
+     (count seq)))

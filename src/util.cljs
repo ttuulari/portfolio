@@ -43,5 +43,9 @@
 
 (defn scale-seq [price-seq]
   (let [first-val   (first price-seq)
-        scaler      (fn [elem] (/ elem first-val))]
+        scaler      (fn [elem]
+                      (-> elem
+                          (/ first-val)
+                          (- 1)
+                          (* 100)))]
     (map scaler price-seq)))

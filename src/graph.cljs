@@ -2,6 +2,7 @@
   (:require
     [om.core :as om :include-macros true]
     [om.dom :as dom :include-macros true]
+    [portfolio.price-utils :as price]
     [portfolio.util :as util]))
 
 (defn app-state->date-labels [app]
@@ -24,8 +25,10 @@
     (if (empty? prices)
       {:labels   labels
        :series   [(repeat (count labels) 0.0)]}
-      (let [all-prices     (concat [(apply map + prices)] sel-prices)
+      (let [cat-prices     (concat [(apply map + prices)] sel-prices)
+            all-prices     (filter (complement price/all-zeros?) cat-prices)
             scaled-prices  (map util/scale-seq all-prices)]
+
         (if (> (count all-prices) 1)
           {:labels   labels
            :series   scaled-prices}

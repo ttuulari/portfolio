@@ -63,7 +63,7 @@
                                                       :axisY {
                                                               :scaleMinSpace 50
                                                               :labelInterpolationFnc (fn [value]
-                                                                                       (util/to-fixed value 1))}}}})
+                                                                                       (util/to-fixed value 2))}}}})
                             (om/build slider/slider-view
                                       {:length (get-in app [:selected-date :total-length])
                                        :range  (get-in app [:selected-date :range])}
