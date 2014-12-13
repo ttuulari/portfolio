@@ -41,3 +41,7 @@
 (defn filter-nans [string]
   (apply str (filter (fn [c] (not (js/isNaN c))) string)))
 
+(defn scale-seq [price-seq]
+  (let [first-val   (first price-seq)
+        scaler      (fn [elem] (/ elem first-val))]
+    (map scaler price-seq)))

@@ -40,7 +40,7 @@
     (assoc-in app
               [:components (:value value)]
               {:amount 0
-               :selected: false})))
+               :selected false})))
 
 (defn update-component [app value]
   (let [c-name   (get-in value [:value :name])

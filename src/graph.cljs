@@ -20,24 +20,43 @@
         to-take       (Math/abs (:range selected-date))]
     (take-last to-take (take (count sub-labels) input))))
 
+(defn construct-prices [labels prices sel-prices]
+    (if (empty? prices)
+      {:labels   labels
+       :series   [(repeat (count labels) 0.0)]}
+      (let [all-prices     (concat [(apply map + prices)] sel-prices)
+            scaled-prices  (map util/scale-seq all-prices)]
+        (if (> (count all-prices) 1)
+          {:labels   labels
+           :series   scaled-prices}
+          {:labels   labels
+           :series   all-prices}))))
+
 (defn graph-input-data
   [input date-labels]
   (let [window-labels (window-input date-labels (:selected-date input) date-labels)
         labels        (take-nth (/ (count window-labels)
                                    (min (count window-labels) 9))
                                 window-labels)
+
         mult-price    (fn [[name data]]
                         (map (fn [elem] (* (:amount data) elem))
                              (window-input date-labels
                                            (:selected-date input)
                                            (:prices (get (:data input) name)))))
-        prices        (map mult-price (:components input))]
 
-    (if (empty? prices)
-      {:labels   labels
-       :series   [(repeat (count labels) 0.0)]}
-      {:labels   labels
-       :series   [(apply map + prices)]})))
+        prices        (map mult-price (:components input))
+
+        selected      (filter (fn [[name data]]
+                                (:selected data))
+                              (:components input))
+
+        sel-prices    (map (fn [[name data]]
+                             (window-input date-labels
+                                           (:selected-date input)
+                                           (:prices (get (:data input) name))))
+                           selected)]
+    (construct-prices labels prices sel-prices)))
 
 (defn draw [element input-data opts]
   (let [constructor  (:constructor opts)]
