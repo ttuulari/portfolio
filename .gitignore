@@ -3,3 +3,5 @@ out/
 portfolio.js
 target/
 bower_components/
+styles/*.map
+styles/.sass-cache/

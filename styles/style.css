@@ -86,24 +86,6 @@ a:hover {
   padding: 10px;
 }
 
-.portfolio-graph .ct-line {
-stroke:rgba(0,1,0,1);
-}
-
-.ct-chart .ct-label,.ct-chart .ct-label.ct-horizontal {
-  color:rgba(0,0,0,1.0);
-  font-size:1.0rem
-}
-
-.ct-chart .ct-label,.ct-chart .ct-label.ct-vertical {
-  color:rgba(0,0,0,1.0);
-  font-size:1.0rem
-}
-
-.ct-chart .ct-series.ct-series-a .ct-line {
-  stroke-width:2px;
-}
-
 .portfolio-summary {
   padding: 10px;
   height:150px;
