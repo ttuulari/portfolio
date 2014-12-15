@@ -10,6 +10,7 @@
     "nouislider": "~7.0.9",
     "react": "~0.11.2",
     "chartist": "~0.4.4",
-    "bootstrap-material-design": "~0.2.1"
+    "bootstrap-material-design": "~0.2.1",
+    "bootstrap": "~3.3.1"
   }
 }
