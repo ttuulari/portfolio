@@ -7,6 +7,7 @@
     [portfolio.graph :as graph]
     [portfolio.util :as util]
     [portfolio.slider :as slider]
+    [om-bootstrap.button :as b]
     [om-tools.dom :as d :include-macros true])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
@@ -61,7 +62,7 @@
     :series   [prices]})
 
 (defn button-data [owner app]
-  (let [base-class   ["btn" "btn-xs" "remove-button" "col-sm-1"]
+  (let [base-class   ["btn" "btn-xs"]
         button-data  {:on-click  (fn []
                                    (put!
                                     (:search-chan (om/get-shared owner))
@@ -71,23 +72,28 @@
       (assoc button-data :class
         (clojure.string/join
          " "
-         (concat base-class ["btn-info"])))
+         (concat base-class ["btn-material-red"])))
       (assoc button-data :class
         (clojure.string/join
          " "
-         (concat base-class ["btn-primary" "btn-raised"]))))))
+         (concat base-class ["btn-material-deeporange" "btn-raised"]))))))
 
 (defn button-text [app]
   (if (:selected app)
     "Deselect"
     "Compare"))
 
-(defn togglebutton-view [app owner]
-  (reify
-    om/IRenderState
-    (render-state
-     [this state]
-     (d/a (button-data owner app) (button-text app)))))
+(defn togglebutton [app owner]
+  (d/a (button-data owner app) (button-text app)))
+
+(defn remove-button [app owner]
+  (d/a {:class   "btn btn-danger btn-xs"
+        :on-click     (fn []
+                        (put!
+                         (:search-chan (om/get-shared owner))
+                         {:topic :remove-click
+                          :value app}))}
+       "Remove"))
 
 (defn portfolio-component-view [app owner]
   (reify
@@ -113,6 +119,8 @@
                                                           :showGrid false}
                                                   :axisY {:showLabel false
                                                           :showGrid false}}}})
-                        (om/build togglebutton-view app)
-                        (om/build remove-button-view app)))))
+                        (d/div {:class "row-buttons col-sm-3"}
+                               (b/toolbar {}
+                                          (togglebutton app owner)
+                                          (remove-button app owner)))))))
 

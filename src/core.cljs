@@ -69,7 +69,7 @@
                                        :range  (get-in app [:selected-date :range])}
                                       {:opts
                                        {:js
-                                        {:className "slider shor"}}})
+                                        {:className "slider show slider-material-red"}}})
                             (om/build range-buttons/range-buttons-view
                                       (:selected-date app)))))
        (g/row {:class "show-grid"}
