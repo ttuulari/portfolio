@@ -38,8 +38,8 @@
         state-index   (:index (delta->data (:range app)))
         active        (= index state-index)]
     (if active
-      (d/a (assoc button-data :class (str class-data "btn-material-red")) text)
-      (d/a (assoc button-data :class (str class-data "btn-material-deeporange")) text))))
+      (d/a (assoc button-data :class (str class-data "btn-material-indigo")) text)
+      (d/a (assoc button-data :class (str class-data "btn-material-bluegrey")) text))))
 
 (defn range-buttons-view [app owner]
   (reify

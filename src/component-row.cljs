@@ -72,11 +72,11 @@
       (assoc button-data :class
         (clojure.string/join
          " "
-         (concat base-class ["btn-material-red"])))
+         (concat base-class ["btn-material-bluegrey"])))
       (assoc button-data :class
         (clojure.string/join
          " "
-         (concat base-class ["btn-material-deeporange" "btn-raised"]))))))
+         (concat base-class ["btn-material-indigo" "btn-raised"]))))))
 
 (defn button-text [app]
   (if (:selected app)
@@ -87,7 +87,7 @@
   (d/a (button-data owner app) (button-text app)))
 
 (defn remove-button [app owner]
-  (d/a {:class   "btn btn-danger btn-xs"
+  (d/a {:class   "btn btn-material-grey btn-xs"
         :on-click     (fn []
                         (put!
                          (:search-chan (om/get-shared owner))

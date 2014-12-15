@@ -44,7 +44,7 @@ a:hover {
 }
 
 .portfolio-component {
-  height:12%;
+
 }
 
 .portfolio-graph {
@@ -79,10 +79,6 @@ a:hover {
 
 .range-buttons {
   width 80%;
-  padding: 10px;
-}
-
-.remove-button {
   padding: 10px;
 }
 
