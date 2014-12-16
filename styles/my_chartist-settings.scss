@@ -23,8 +23,8 @@ $ct-class-horizontal: ct-horizontal !default;
 $ct-container-ratio: (1/1.618) !default;
 
 // Text styles for labels
-$ct-text-color: rgba(0, 0, 0, 0.4) !default;
-$ct-text-size: 0.75rem !default;
+$ct-text-color: rgba(0, 0, 0, 1.0) !default;
+$ct-text-size: 1.0rem !default;
 $ct-text-align: left !default;
 $ct-horizontal-text-align: left !default;
 $ct-vertical-text-align: right !default;
@@ -37,7 +37,7 @@ $ct-grid-width: 1px !default;
 // Line chart properties
 $ct-line-width: 2px !default;
 $ct-line-dasharray: false !default;
-$ct-point-size: 10px !default;
+$ct-point-size: 1px !default;
 // Line chart point, can be either round or square
 $ct-point-shape: round !default;
 // Area fill transparency between 0 and 1
@@ -63,3 +63,32 @@ $ct-include-alternative-responsive-containers: $ct-include-classes !default;
 // Series names and colors. This can be extended or customized as desired. Just add more series and colors.
 $ct-series-names: (a, b, c, d, d) !default;
 $ct-series-colors: (#d70206, #F05B4F, #F4C63D, #453D3F, #F05B41) !default;
+
+.ct-legend {
+    padding: 0;
+    font-family: sans-serif;
+
+    li {
+        position: relative;
+        padding-left: 1.3em;
+        margin-bottom: 0.3em;
+        list-style-type: none;
+        font-size: 10px;
+    }
+
+    li::before {
+        height: 1em;
+        width: 1em;
+        position: absolute;
+        top: 0.1em;
+        left: 0;
+        content: '';
+        border-radius: 1em;
+    }
+
+     @for $i from 0 to length($ct-series-colors) {
+          .ct-series-#{$i}::before {
+            background-color: nth($ct-series-colors, $i + 1);
+        }
+    }
+}
