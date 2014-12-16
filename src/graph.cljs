@@ -1,9 +1,10 @@
 (ns portfolio.graph
   (:require
     [om.core :as om :include-macros true]
-    [om.dom :as dom :include-macros true]
     [portfolio.price-utils :as price]
-    [portfolio.util :as util]))
+    [portfolio.util :as util]
+    [om-bootstrap.grid :as g]
+    [om-tools.dom :as d :include-macros true]))
 
 (defn app-state->date-labels [app]
   (-> app
@@ -59,6 +60,7 @@
                                            (:selected-date input)
                                            (:prices (get (:data input) name))))
                            selected)]
+
     (construct-prices labels prices sel-prices)))
 
 (defn draw [element input-data opts]
@@ -68,6 +70,24 @@
       (clj->js input-data)
       (clj->js (:graph-opts opts))
       (clj->js (:responsive-opts opts)))))
+
+(defn output-legends [present selected]
+  (if (empty? present)
+    selected
+    (concat ["Portfolio"] selected)))
+
+(defn build-legend [components]
+  (let [name-mapper     (map (fn [[a-name _]] a-name))
+        amount-filter   (filter (fn [[_ elem]] (> (:amount elem) 0)))
+        selected-filter (filter (fn [[_ elem]] (:selected elem)))
+        name-amount     (comp amount-filter name-mapper)
+        name-selected   (comp selected-filter name-mapper)
+        present         (transduce name-amount conj [] components)
+        selected        (transduce name-selected conj [] components)]
+  (d/div {:class "ct-legend list-group"}
+         (map-indexed (fn [index legend]
+                        (d/li {:class (str "list-group-item ct-legend-text ct-series-" index)} legend))
+                      (output-legends present selected)))))
 
 (defn graph-view [app owner opts]
   (reify
@@ -81,4 +101,4 @@
 
     om/IRenderState
     (render-state [this state]
-      (dom/div (clj->js (:js opts))))))
+      (d/div (clj->js (:js opts))))))

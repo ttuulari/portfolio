@@ -48,22 +48,28 @@
                             (om/build summary/portfolio-summary-view app)))
               (g/col {:xs 12 :md 8}
                      (d/div {:class "graph-slider"}
-                            (om/build graph/graph-view
-                                      (graph/graph-input-data app date-labels)
-                                      {:opts
-                                       {:js          {:className "ct-chart portfolio-graph"}
-                                        :constructor (.-Line js/Chartist)
-                                        :graph-opts  {:width 600
-                                                      :height 300
-                                                      :lineSmooth false
-                                                      :showPoint false
-                                                      :chartPadding 20
-                                                      :axisX {
-                                                              :showLabel true}
-                                                      :axisY {
-                                                              :scaleMinSpace 50
-                                                              :labelInterpolationFnc (fn [value]
-                                                                                       (util/to-fixed value 2))}}}})
+                            (g/row {:class "show-grid"}
+                                   (g/col {:xs 13 :md 8}
+                                          (om/build graph/graph-view
+                                                    (graph/graph-input-data app date-labels)
+                                                    {:opts
+                                                     {:js          {:className "ct-chart portfolio-graph"
+                                                                    :xs 8 :md 4}
+                                                      :constructor (.-Line js/Chartist)
+                                                      :graph-opts  {:width 600
+                                                                    :height 300
+                                                                    :lineSmooth false
+                                                                    :showPoint false
+                                                                    :chartPadding 20
+                                                                    :axisX {
+                                                                            :showLabel true}
+                                                                    :axisY {
+                                                                            :scaleMinSpace 50
+                                                                            :labelInterpolationFnc (fn [value]
+                                                                                                     (util/to-fixed value 2))}}}}))
+                                   (g/col {:xs 5 :md 3}
+                                          (graph/build-legend (:components app))))
+
                             (om/build slider/slider-view
                                       {:length (get-in app [:selected-date :total-length])
                                        :range  (get-in app [:selected-date :range])}

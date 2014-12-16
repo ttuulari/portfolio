@@ -58,8 +58,8 @@
                                         }))))))
 
 (defn graph-input-data [prices]
-   {:labels   (repeat (count prices) 0)
-    :series   [prices]})
+  {:labels   (repeat (count prices) 0)
+   :series   [prices]})
 
 (defn button-data [owner app]
   (let [base-class   ["btn" "btn-xs"]
