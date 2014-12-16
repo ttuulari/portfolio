@@ -2,6 +2,7 @@
   (:require
     [cljs.core.async :as async
       :refer [<! >! chan pub sub put! timeout]]
+
     [portfolio.graph :as graph]
     [portfolio.input :as input]
     [portfolio.components :as components]
@@ -12,6 +13,7 @@
     [portfolio.slider :as slider]
     [portfolio.util :as util]
     [portfolio.prices :as prices]
+    [clojure.data :as data]
     [om.core :as om :include-macros true]
     [om-bootstrap.grid :as g]
     [om-tools.dom :as d :include-macros true])
@@ -98,10 +100,15 @@
 
 (def app-history (atom [@app-state]))
 
-(add-watch app-state :history
-  (fn [_ _ _ n]
+(defn store-undo [app-history o n]
+  (let [[_ new _] (data/diff o n)]
     (when-not (= (last @app-history) n)
-      (swap! app-history conj n))))
+      (when (contains? new :components)
+        (swap! app-history conj n)))))
+
+(add-watch app-state :history
+  (fn [_ _ o n]
+    (store-undo app-history o n)))
 
 (defn undo []
    (when (> (count @app-history) 1)
