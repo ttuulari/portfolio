@@ -68,26 +68,29 @@
                                                                     :axisY {
                                                                             :scaleMinSpace 50
                                                                             :labelInterpolationFnc (fn [value]
-                                                                                                     (util/to-fixed value 2))}}}}))
-                                   (g/col {:xs 5 :md 3}
-                                          (graph/build-legend (:components app))))
+                                                                                                     (util/to-fixed value 2))}}}})
+                                          (om/build slider/slider-view
+                                                    {:length (get-in app [:selected-date :total-length])
+                                                     :range  (get-in app [:selected-date :range])}
+                                                    {:opts
+                                                     {:js
+                                                      {:className "slider show slider-material-indigo"}}}))
 
-                            (om/build slider/slider-view
-                                      {:length (get-in app [:selected-date :total-length])
-                                       :range  (get-in app [:selected-date :range])}
-                                      {:opts
-                                       {:js
-                                        {:className "slider show slider-material-red"}}})
-                            (om/build range-buttons/range-buttons-view
-                                      (:selected-date app)))))
-       (g/row {:class "show-grid"}
-              (g/col {:xs 6 :md 4}
-                     (d/div {:class "search-container"}
-                            (om/build input/input-view true)
-                            (om/build search-results/results-view app))))
+                                   (g/col {:xs 5 :md 3}
+                                          (graph/build-legend (:components app))))))
+          (g/row {:class "show-grid"}
+                 (g/col {:xs 6 :md 4}
+                        (d/div {:class "search-container"}
+                               (om/build input/input-view true)
+                               (om/build search-results/results-view app)))
+
+                  (g/col {:xs 10 :md 6}
+                         (om/build range-buttons/range-buttons-view
+                                   (:selected-date app))))
+
        (d/div {:class "container portfolio-container"}
               (g/row {:class "portfolio-container-row"}
-                     (om/build components/portfolio-list-view app))))))))
+                     (om/build components/portfolio-list-view app)))))))))
 
 (om/root
   components-view
