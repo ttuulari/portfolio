@@ -1,7 +1,7 @@
   (ns portfolio.core
   (:require
     [cljs.core.async :as async
-      :refer [<! >! chan pub put! timeout]]
+      :refer [<! >! chan pub sub put! timeout]]
     [portfolio.graph :as graph]
     [portfolio.input :as input]
     [portfolio.components :as components]
@@ -94,4 +94,25 @@
    :shared {:search-chan   search-chan
             :notif-chan    notif-chan}})
 
-;(swap! app-state assoc :data [["mon" 3] ["tue" 8] ["wed" 5] ["thu" 13] ["fri" 12]])
+;================ Time Travel =================
+
+(def app-history (atom [@app-state]))
+
+(add-watch app-state :history
+  (fn [_ _ _ n]
+    (when-not (= (last @app-history) n)
+      (swap! app-history conj n))))
+
+(defn undo []
+   (when (> (count @app-history) 1)
+      (swap! app-history pop)
+      (reset! app-state (last @app-history))))
+
+(defn receive-undos []
+  (let [undo-chan (sub notif-chan :undo (chan) false)]
+    (go-loop []
+             (let [undo-elem      (<! undo-chan)]
+               (undo))
+             (recur))))
+
+(receive-undos)

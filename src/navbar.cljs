@@ -3,7 +3,15 @@
     [om.core :as om :include-macros true]
     [om-bootstrap.button :as b]
     [om-bootstrap.nav :as n]
+    [portfolio.util :as util]
+    [cljs.core.async :as async
+      :refer [put!]]
     [om-tools.dom :as d :include-macros true]))
+
+(defn undo-click [owner]
+   (let [search-chan   (:search-chan  (om/get-shared owner))]
+     (put! search-chan
+           {:topic   :undo})))
 
 (defn navbar-view [app owner]
   (reify
@@ -21,6 +29,6 @@
                           (d/li {:className "dropdown"}
                                 (d/a {:class "dropdown-toggle"
                                       :data-toggle "dropdown"}
-                                     (d/b {:class "mdi-navigation-menu"})))))))))
-
-
+                                     (d/b {:class "mdi-navigation-menu"}))))
+             (d/ul {:class "nav navbar-nav navbar-right"}
+                   (d/li {} (d/a {:on-click (fn [] (undo-click owner))} "Undo"))))))))
