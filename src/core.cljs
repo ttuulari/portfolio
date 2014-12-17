@@ -6,6 +6,7 @@
    [portfolio.graph :as graph]
    [portfolio.container :as container]
    [portfolio.prices :as prices]
+   [portfolio.util :as util]
    [clojure.data :as data]
    [om.core :as om :include-macros true])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))

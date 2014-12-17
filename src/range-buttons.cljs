@@ -10,11 +10,17 @@
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
 (defn update-range
-  [end-date delta]
+  ([end-date delta]
     {:end-date     end-date
      :range        delta
+     :position     (prices/total-length)
      :total-length (prices/total-length)
      :final-date   (prices/final-date)})
+
+  ([end-date delta position]
+   (assoc
+     (update-range end-date delta)
+     :position position)))
 
 (defn delta->data [delta]
   (condp = delta
@@ -57,7 +63,8 @@
                                   (update-range
                                     (util/date-delta-days->str
                                       (:final-date @app)
-                                      (- int-value (:total-length @app)))
+                                      (- int-value (:total-length @app))
+                                      int-value)
                                     (:range @app)))]
 
             (condp = c

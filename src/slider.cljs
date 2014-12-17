@@ -8,6 +8,7 @@
   (:use [jayq.core :only [$]]))
 
 (defn on-slide [elem owner app]
+  (util/log @app)
   "Add slide event handling here, e.g. core.async channel put!."
    (let [search-chan   (:search-chan  (om/get-shared owner))]
      (put! search-chan
@@ -15,12 +16,13 @@
            :value   (.val elem)})))
 
 (defn app->slider [app]
-  (let [slider-range   (dec (:length app))]
-    {:start slider-range
+  (let [slider-range   (dec (:total-length app))
+        position       (dec (:position app))]
+    {:start position
      :connect "lower"
      :step 1
      :range {:min 0
-             :max slider-range}})  )
+             :max slider-range}}))
 
 (defn draw [owner app]
   (let [element (om/get-node owner)

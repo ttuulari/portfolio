@@ -44,12 +44,12 @@
                                                                          :scaleMinSpace 50
                                                                          :labelInterpolationFnc (fn [value]
                                                                                                   (util/to-fixed value 2))}}}})
-                                       (om/build slider/slider-view
-                                                 {:length (get-in app [:selected-date :total-length])
-                                                  :range  (get-in app [:selected-date :range])}
-                                                 {:opts
-                                                  {:js
-                                                   {:className "slider show slider-material-indigo"}}}))
+                                       (om/build
+                                        slider/slider-view
+                                        (:selected-date app)
+                                        {:opts
+                                         {:js
+                                          {:className "slider show slider-material-indigo"}}}))
 
                                 (g/col {:xs 5 :md 3}
                                        (graph/build-legend (:components app))))))
