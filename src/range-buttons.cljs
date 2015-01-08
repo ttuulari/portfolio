@@ -10,6 +10,7 @@
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
 (defn update-range
+  "Construct date range map."
   [end-date delta]
     {:end-date     end-date
      :range        delta
@@ -17,19 +18,24 @@
      :final-date   (prices/final-date)})
 
 (defn delta->data [delta]
+  "Map delta days to interval map."
   (condp = delta
     -7     {:text "1 Week" :index 0}
     -30    {:text "1 Month" :index 1}
     -180   {:text "6 Months" :index 2}
     -365   {:text "1 Year" :index 3}))
 
-(defn clicked [app owner delta index]
-   (let [search-chan   (:search-chan  (om/get-shared owner))]
-     (put! search-chan
-           {:topic   :range
-            :value   (update-range (:end-date app) delta)})))
+(defn clicked
+  "Range button click handler."
+  [app owner delta index]
+  (let [search-chan   (:search-chan  (om/get-shared owner))]
+    (put! search-chan
+          {:topic   :range
+           :value   (update-range (:end-date app) delta)})))
 
-(defn create-button [app owner delta]
+(defn create-button
+  "Create range button based on app state."
+  [app owner delta]
   (let [delta-data    (delta->data delta)
         text          (:text delta-data)
         index         (:index delta-data)
@@ -41,29 +47,33 @@
       (d/a (assoc button-data :class (str class-data "btn-material-indigo")) text)
       (d/a (assoc button-data :class (str class-data "btn-material-bluegrey")) text))))
 
-(defn range-buttons-view [app owner]
+(defn range-buttons-view
+  "Range buttons Om component."
+  [app owner]
   (reify
     om/IWillMount
-    (will-mount [this]
-      (let [range-chan       (sub (:notif-chan (om/get-shared owner)) :range (chan) false)
-            slide-chan       (sub (:notif-chan (om/get-shared owner)) :slide (chan) false)]
-        (go-loop []
-          (let [[v c]           (alts! [range-chan slide-chan])
-                range-update    (fn [] (update-range
-                                         (get-in v [:value :final-date])
-                                         (get-in v [:value :range])))
-                int-value       (int (:value v))
-                slide-update    (fn []
-                                  (update-range
-                                    (util/date-delta-days->str
-                                      (:final-date @app)
-                                      (- int-value (:total-length @app)))
-                                    (:range @app)))]
+    (will-mount
+     [this]
+     (let [range-chan       (sub (:notif-chan (om/get-shared owner)) :range (chan) false)
+           slide-chan       (sub (:notif-chan (om/get-shared owner)) :slide (chan) false)]
+       (go-loop
+        []
+        (let [[v c]           (alts! [range-chan slide-chan])
+              range-update    (fn [] (update-range
+                                      (get-in v [:value :final-date])
+                                      (get-in v [:value :range])))
+              int-value       (int (:value v))
+              slide-update    (fn []
+                                (update-range
+                                 (util/date-delta-days->str
+                                  (:final-date @app)
+                                  (- int-value (:total-length @app)))
+                                 (:range @app)))]
 
-            (condp = c
-              range-chan   (om/transact! app range-update)
-              slide-chan   (om/transact! app slide-update)))
-          (recur))))
+          (condp = c
+            range-chan   (om/transact! app range-update)
+            slide-chan   (om/transact! app slide-update)))
+        (recur))))
 
     om/IRenderState
     (render-state [this state]
