@@ -11,6 +11,8 @@
     [om-tools.dom :as d :include-macros true])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
+(def summary-decimals 3)
+
 (defn build-summary
   "Build summary data based on portfolio and index price sequences."
   [prices index-price]
@@ -34,14 +36,19 @@
 
         filter-zero (filter (fn [e] (not (zero? (:value e)))))
         filter-nan  (filter (fn [e] (not (js/isNaN (:value e)))))
-        fix-prec    (map (fn [e] (assoc e :value (util/to-fixed (:value e) 2))))
+        fix-prec    (map (fn [e]
+                           (assoc
+                             e
+                             :value
+                             (util/to-fixed (:value e)
+                                            summary-decimals))))
         tx          (comp
                      filter-zero
                      filter-nan
                      fix-prec)]
     (into [] tx summary)))
 
-(defn portolio-summary-data
+(defn portfolio-summary-data
   "Construct summary data based on state."
   [input]
   (let [mult-price    (fn [[name data]]
@@ -88,7 +95,7 @@
     om/IRenderState
     (render-state
      [this state]
-     (let [data           (portolio-summary-data app)
+     (let [data           (portfolio-summary-data app)
            selected-date  (:selected-date app)
            rows           (summary-items selected-date data)]
        (d/div {:class "portfolio-summary"}
