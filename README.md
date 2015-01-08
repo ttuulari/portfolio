@@ -18,6 +18,9 @@ Construct a portfolio of instruments and see different metrics on different time
 
 ```lein cljsbuild auto dev```
 
+## Testing
+Have phantomjs installed.
+
 ### Leiningen cljs auto test
 
 ```lein cljsbuild auto test```
