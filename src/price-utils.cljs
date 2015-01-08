@@ -17,7 +17,8 @@
   (let [avg     (average coll)
         diffs   (map (fn [e] (- e avg)) coll)
         squared (map (fn [e] (* e e)) diffs)]
-    (/ (reduce + squared) (- (count coll) 1))))
+    (/ (reduce + squared)
+       (- (count coll) 1))))
 
 (defn sample-std [coll]
   (Math.pow (sample-variance coll) 0.5))
@@ -32,7 +33,9 @@
         deno   (drop-last coll)]
     (map - nume deno)))
 
-(defn sharpe [coll index-coll]
+(defn sharpe
+  "Sharpe ratio between coll and index-coll"
+  [coll index-coll]
   (let [diff-coll   (return-ratio coll)
         diff-index  (return-ratio index-coll)
         diff        (map - diff-coll diff-index)
@@ -40,7 +43,9 @@
         std-diff    (Math.pow (sample-variance diff) 0.5)]
     (/ e-diff std-diff)))
 
-(defn gain-to-pain [coll]
+(defn gain-to-pain
+  "Gain-to-pain ratio of coll"
+  [coll]
   (let [diff   (difference-seq coll)
         pos    (reduce + (filter (fn [e] (> e 0)) diff))
         neq    (Math.abs (reduce + (filter (fn [e] (< e 0)) diff)))]
