@@ -3,7 +3,6 @@
     [cljs.core.async :as async
       :refer [<! >! chan pub put!]]
     [om.core :as om :include-macros true]
-    [om.dom :as dom :include-macros true]
     [portfolio.graph :as graph]
     [portfolio.util :as util]
     [portfolio.slider :as slider]
@@ -12,10 +11,11 @@
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
 (defn remove-button-view [app owner]
+  "Om component for portfolio component remove button."
   (reify
     om/IRenderState
     (render-state [this state]
-                  (d/a {:class   "btn btn-danger btn-xs remove-button  col-sm-1"
+                  (d/a {:class   "btn btn-danger btn-xs remove-button col-sm-1"
                         :on-click     (fn []
                                         (put!
                                          (:search-chan (om/get-shared owner))
@@ -24,6 +24,7 @@
                        "Remove"))))
 
 (defn parse-input-num [elem]
+  "Parse component amount input."
   (-> elem
       .trim
       util/filter-nans
@@ -31,7 +32,7 @@
       (util/l-trim "0")))
 
 (defn handle-change
-  "Grab the input element via the `input` reference."
+  "Input amount chage handler. Grab the input element via the `input` reference."
   [owner state component-name]
   (let [value         (parse-input-num (.-value (om/get-node owner "term")))
         search-chan   (:search-chan  (om/get-shared owner))
@@ -43,25 +44,29 @@
     false))
 
 (defn amount-input-view [app owner]
+  "Om component for portfolio component amount input."
   (reify
     om/IRenderState
-    (render-state [this state]
-      (dom/div #js {:className "form-group col-sm-1"}
-               (dom/div #js {:className "input-group"}
-                        (dom/input #js {:className     "form-control"
-                                        :type          "text"
-                                        :autoComplete  "off"
-                                        :ref           "term"
-                                        :value         (:amount app)
-                                        :placeholder   (:amount app)
-                                        :onChange      #(handle-change owner state (:name app))
-                                        }))))))
+    (render-state
+     [this state]
+     (d/div  {:class "form-group col-sm-1"}
+             (d/div {:class "input-group"}
+                    (d/input {:class     "form-control"
+                              :type          "text"
+                              :auto-complete  "off"
+                              :ref           "term"
+                              :value         (:amount app)
+                              :placeholder   (:amount app)
+                              :on-change      #(handle-change owner state (:name app))
+                              }))))))
 
 (defn graph-input-data [prices]
+  "Construct empty graph input data."
   {:labels   (repeat (count prices) 0)
    :series   [prices]})
 
 (defn button-data [owner app]
+  "Construct button based on selected status."
   (let [base-class   ["btn" "btn-xs"]
         button-data  {:on-click  (fn []
                                    (put!
@@ -79,14 +84,18 @@
          (concat base-class ["btn-material-indigo" "btn-raised"]))))))
 
 (defn button-text [app]
+  "Button text based on selected status."
   (if (:selected app)
     "Deselect"
     "Compare"))
 
 (defn togglebutton [app owner]
-  (d/a (button-data owner app) (button-text app)))
+  "Component select for comparison button."
+  (d/a (button-data owner app)
+       (button-text app)))
 
 (defn remove-button [app owner]
+  "Component remove button."
   (d/a {:class   "btn btn-material-grey btn-xs"
         :on-click     (fn []
                         (put!
@@ -96,6 +105,7 @@
        "Remove"))
 
 (defn portfolio-component-view [app owner]
+  "Om component single portfolio component."
   (reify
     om/IRenderState
     (render-state [this state]
