@@ -8,6 +8,10 @@ Construct a portfolio of instruments and see different metrics on different time
 
 ```bower install```
 
+## Building
+
+First autobuilds need patience.
+
 ### Leiningen build dev once
 ```lein cljsbuild once dev```
 
@@ -19,6 +23,7 @@ Construct a portfolio of instruments and see different metrics on different time
 ```lein cljsbuild auto dev```
 
 ## Testing
+
 Have phantomjs installed.
 
 ### Leiningen cljs auto test
