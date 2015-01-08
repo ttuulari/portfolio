@@ -10,7 +10,8 @@
                  [org.clojure/core.async "0.1.267.0-0d7780-alpha"]
                  [racehub/om-bootstrap "0.3.2"]
                  [om "0.7.3"]
-                 [jayq "2.5.2"]]
+                 [jayq "2.5.2"]
+                 [prismatic/dommy "0.1.2"]]
 
   :plugins [[lein-cljsbuild "1.0.4-SNAPSHOT"]
             [com.cemerick/clojurescript.test "0.3.3"]]
@@ -30,6 +31,7 @@
              {:id "test"
               :source-paths ["bower_components/react"
                              "bower_components/react-externs"
+                             "bower_components/externs-jquery"
                              "bower_components/jquery/dist"
                              "src"
                              "test"]
@@ -39,10 +41,26 @@
                          :optimizations :whitespace
                          :preamble ["react.min.js"
                                     "jquery.min.js"]
-                         :externs ["externs.js"]}
+                         :externs ["externs.js"
+                                   "index.js"]}
+              }
 
-              :notify-command ["slimerjs" :cljs.test/runner "out/test/unit-test.js"]
-
+             {:id "prod"
+              :source-paths ["bower_components/react"
+                             "bower_components/react-externs"
+                             "bower_components/jquery/dist"
+                             "bower_components/externs-jquery"
+                             "bower_components/chartist/dist"
+                             "bower_components/nouislider/distribute"
+                             "src"]
+              :compiler {:pretty-print true
+                         :output-dir "out/prod"
+                         :output-to "out/prod/portfolio.js"
+                         :optimizations :advanced
+                         :externs ["externs.js"
+                                   "index.js"
+                                   "chartist.js"
+                                   "jquery.nouislider.all.min.js"]}
               }]
 
     :test-commands {"unit-tests" ["slimerjs" :runner
