@@ -7,7 +7,7 @@
       :refer [put!]])
   (:use [jayq.core :only [$]]))
 
-(defn on-slide [elem owner app]
+(defn on-slide [elem owner]
   "Add slide event handling here, e.g. core.async channel put!."
    (let [search-chan   (:search-chan  (om/get-shared owner))]
      (put! search-chan
@@ -26,7 +26,7 @@
   (let [element (om/get-node owner)
         $elem   ($ element)]
     (.noUiSlider $elem (clj->js (app->slider app)) true)
-    (.on $elem "slide" (fn [] (on-slide $elem owner app)))
+    (.on $elem "slide" (fn [] (on-slide $elem owner)))
     (.val $elem (dec (:length app)))))
 
 (defn slider-view [app owner opts]

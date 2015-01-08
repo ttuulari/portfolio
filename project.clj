@@ -6,7 +6,7 @@
                  "https://oss.sonatype.org/content/groups/staging/"}
 
   :dependencies [[org.clojure/clojure "1.6.0"]
-                 [org.clojure/clojurescript "0.0-2322"]
+                 [org.clojure/clojurescript "0.0-2496"]
                  [org.clojure/core.async "0.1.267.0-0d7780-alpha"]
                  [racehub/om-bootstrap "0.3.2"]
                  [om "0.7.3"]
