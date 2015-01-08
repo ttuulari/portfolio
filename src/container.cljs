@@ -14,6 +14,7 @@
    [portfolio.slider :as slider]))
 
 (defn render-container [app]
+  "Main app Om component."
   (d/div
    {:class "grids-examples"}
    (om/build navbar/navbar-view true)
