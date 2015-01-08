@@ -8,7 +8,7 @@ Construct a portfolio of instruments and see different metrics on different time
 
 `bower install`
 
-### Leiningen auto build
+### Leiningen cljs auto build
 
 `lein cljsbuild auto portfolio`
 
