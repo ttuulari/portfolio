@@ -31,7 +31,7 @@
      :series   [(repeat (count labels) 0.0)]}
     (let [cat-prices     (concat [(apply map + prices)] sel-prices)
           all-prices     (filter (complement price/all-zeros?) cat-prices)
-          scaled-prices  (map util/scale-seq all-prices)]
+          scaled-prices  (map price/scale-seq all-prices)]
 
       (if (> (count all-prices) 1)
         {:labels   labels
