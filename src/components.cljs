@@ -18,6 +18,7 @@
               ["Chart" "col-sm-2"]])
 
 (defn portfolio-list-column [app owner]
+  "Om component for single portfolio header column."
   (reify
     om/IRenderState
     (render-state [this state]
@@ -25,6 +26,7 @@
             (d/div nil (first app))))))
 
 (defn portfolio-list-columns [app owner]
+  "Om component for portfolio component columns."
   (reify
     om/IRenderState
     (render-state [this state]
@@ -35,6 +37,7 @@
             (map (fn [elem] elem) columns)))))))
 
 (defn add-component [app value]
+  "Add component to state."
   (if (contains? (:components app) (:value value))
     app
     (assoc-in app
@@ -43,6 +46,7 @@
                :selected false})))
 
 (defn update-component [app value]
+  "Update component in state."
   (let [c-name   (get-in value [:value :name])
         c-amount (get-in value [:value :amount])]
     (if (contains? (:components app) c-name)
@@ -50,11 +54,13 @@
       app)))
 
 (defn remove-component [app value]
+  "Remove component from state."
   (assoc app
     :components
     (dissoc (:components app) (get-in value [:value :name]))))
 
 (defn compare-component [app value]
+  "Modify component selected state."
   (let [c-name   (get-in value [:value :name])
         current  (get-in app [:components c-name :selected])]
     (if (contains? (:components app) c-name)
@@ -62,6 +68,7 @@
       app)))
 
 (defn portfolio-list-view [app owner]
+  "Om component of all the portfolio components."
   (reify
     om/IWillMount
     (will-mount [this]
