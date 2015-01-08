@@ -12,16 +12,37 @@
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
 (defn build-summary
-  [prices index]
-    {:value         (last prices)
-     :yield         (price/yield
-                      (first prices)
-                      (last prices))
-     :std           (price/sample-std (price/return-ratio prices))
-     :sharpe        (price/sharpe (price/return-ratio prices) (price/return-ratio index))
-     :pain-to-gain  (price/gain-to-pain prices)})
+  "Build summary data based on portfolio and index price sequences."
+  [prices index-price]
+  (let [summary   [{:topic         "Value $"
+                    :value         (last prices)}
+
+                   {:topic         "Yield %"
+                    :value         (price/yield
+                                    (first prices)
+                                    (last prices))}
+
+                   {:topic         "Return STD"
+                    :value         (price/sample-std (price/return-ratio prices))}
+
+                   {:topic         "Sharpe"
+                    :value         (price/sharpe (price/return-ratio prices) (price/return-ratio index-price))}
+
+                   {:topic         "Gain-to-pain"
+                    :value         (price/gain-to-pain prices)}]
+
+
+        filter-zero (filter (fn [e] (not (zero? (:value e)))))
+        filter-nan  (filter (fn [e] (not (js/isNaN (:value e)))))
+        fix-prec    (map (fn [e] (assoc e :value (util/to-fixed (:value e) 2))))
+        tx          (comp
+                     filter-zero
+                     filter-nan
+                     fix-prec)]
+    (into [] tx summary)))
 
 (defn portolio-summary-data
+  "Construct summary data based on state."
   [input]
   (let [mult-price    (fn [[name data]]
                         (map (fn [elem] (* (:amount data) elem))
@@ -41,56 +62,38 @@
       (build-summary window-prices window-index))))
 
 (defn summary-items [selected-date data]
-  (let [base   [{:topic "Start date: " :value (util/date-delta-days->str (:end-date selected-date)
-                                                                         (:range selected-date))}
-                {:topic "End date: "   :value (:end-date selected-date)}]]
-       (cond-> base
-               (and (contains? data :value) (not (zero? (:value data))))
-               (conj base
-                     {:topic "Value $ "
-                      :value (util/to-fixed (:value data) 2)})
+  (let [base   [{:topic "Start date"
+                 :value (util/date-delta-days->str (:end-date selected-date)
+                                                   (:range selected-date))}
+                {:topic "End date"
+                 :value (:end-date selected-date)}]]
+    (into base data)))
 
-               (and (contains? data :yield) (not (zero? (:yield data))))
-               (conj base
-                     {:topic "Yield % "
-                      :value (util/to-fixed (:yield data) 2)})
-
-               (and (contains? data :std) (not (js/isNaN (:std data))))
-               (conj base
-                     {:topic "Return STD "
-                      :value (util/to-fixed (:std data) 4)})
-
-               (and (contains? data :sharpe) (not (js/isNaN (:sharpe data))))
-               (conj base
-                     {:topic "Sharpe "
-                      :value (util/to-fixed (:sharpe data) 4)})
-
-               (and (contains? data :pain-to-gain) (not (js/isNaN (:pain-to-gain data))))
-               (conj base
-                     {:topic "Gain-to-pain "
-                      :value (util/to-fixed (:pain-to-gain data) 4)})
-               )))
-
-
-(defn summary-row-view [app owner]
+(defn summary-row-view
+  "Portfolio summary item Om component"
+  [app owner]
   (reify
     om/IRenderState
-    (render-state [this state]
-                  (d/li {:class "list-group-item"}
-                        (d/div {:class "row"}
-                               (d/div {:class "col-sm-5"} (:topic app))
-                               (d/div {:class "col-sm-6"} (:value app)))))))
+    (render-state
+     [this state]
+     (d/li {:class "list-group-item"}
+           (d/div {:class "row"}
+                  (d/div {:class "col-sm-5"} (:topic app))
+                  (d/div {:class "col-sm-6"} (:value app)))))))
 
-(defn portfolio-summary-view [app owner]
+(defn portfolio-summary-view
+  "Portfolio summary Om component"
+  [app owner]
   (reify
     om/IRenderState
-    (render-state [this state]
-    (let [data           (portolio-summary-data app)
-          selected-date  (:selected-date app)
-          rows           (summary-items selected-date data)]
-      (d/div {:class "portfolio-summary"}
-             (p/panel
-              {:header "Your Portfolio"
-               :list-group (d/ul {:class "list-group"}
-                                 (om/build-all summary-row-view rows))}
-              nil))))))
+    (render-state
+     [this state]
+     (let [data           (portolio-summary-data app)
+           selected-date  (:selected-date app)
+           rows           (summary-items selected-date data)]
+       (d/div {:class "portfolio-summary"}
+              (p/panel
+               {:header "Your Portfolio"
+                :list-group (d/ul {:class "list-group"}
+                                  (om/build-all summary-row-view rows))}
+               nil))))))
