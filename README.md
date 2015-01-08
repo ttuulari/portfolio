@@ -11,6 +11,9 @@ Construct a portfolio of instruments and see different metrics on different time
 ### Leiningen build dev once
 ```lein cljsbuild once dev```
 
+### Leiningen build production once
+```lein cljsbuild once prod```
+
 ### Leiningen cljs auto build
 
 ```lein cljsbuild auto dev```
