@@ -29,6 +29,7 @@
                 :source-map true}}
 
              {:id "test"
+              :notify-command ["slimerjs" :cljs.test/runner "out/test/unit-test.js"]
               :source-paths ["bower_components/react"
                              "bower_components/react-externs"
                              "bower_components/externs-jquery"
@@ -42,8 +43,7 @@
                          :preamble ["react.min.js"
                                     "jquery.min.js"]
                          :externs ["externs.js"
-                                   "index.js"]}
-              }
+                                   "index.js"]}}
 
              {:id "prod"
               :source-paths ["bower_components/react"
