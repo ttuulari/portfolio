@@ -1,4 +1,6 @@
 (ns portfolio.portfolio-summary
+  "Om component that displays the portfolio summary metrics.
+  build-summary function constructs the displayed data."
   (:require
     [cljs.core.async :as async
       :refer [<! >! chan put! sub]]
