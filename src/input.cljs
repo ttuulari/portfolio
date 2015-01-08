@@ -3,7 +3,6 @@
     [cljs.core.async :as async
       :refer [>! put! sub chan]]
     [om.core :as om :include-macros true]
-    [om.dom :as dom :include-macros true]
     [om-bootstrap.input :as i]
     [om-tools.core :refer-macros [defcomponentk]])
 
@@ -22,6 +21,7 @@
     false))
 
 (defcomponentk input-view [owner state]
+  "Portfolio search input om component."
   (init-state [_] {:text ""})
 
   (will-mount [this]
