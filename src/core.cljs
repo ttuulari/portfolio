@@ -54,9 +54,10 @@
 
 (defn receive-undos []
   (let [undo-chan (sub notif-chan :undo (chan) false)]
-    (go-loop []
-             (let [undo-elem      (<! undo-chan)]
-               (undo))
-             (recur))))
+    (go-loop
+     []
+     (let [undo-elem      (<! undo-chan)]
+       (undo))
+     (recur))))
 
 (receive-undos)
