@@ -96,7 +96,9 @@
         selected        (into [] name-selected components)]
     (d/div {:class "ct-legend list-group"}
            (map-indexed (fn [index legend]
-                          (d/li {:class (str "list-group-item ct-legend-text ct-series-" index)} legend))
+                          (d/li
+                           {:class (str "list-group-item ct-legend-text ct-series-" index)}
+                           legend))
                         (output-legends present selected)))))
 
 (defn graph-view [app owner opts]
