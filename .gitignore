@@ -6,3 +6,4 @@ bower_components/
 styles/*.map
 styles/.sass-cache/
 .lein-repl-history
+.lein-failures

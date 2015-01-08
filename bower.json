@@ -11,6 +11,9 @@
     "react": "~0.11.2",
     "chartist": "~0.4.4",
     "bootstrap-material-design": "~0.2.1",
-    "bootstrap": "~3.3.1"
+    "bootstrap": "~3.3.1",
+    "es5-shim": "v4.0.5",
+    "console-polyfill": "0.1.2",
+    "react-externs": "https://github.com/steida/react-externs.git"
   }
 }

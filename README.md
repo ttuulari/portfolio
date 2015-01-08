@@ -6,10 +6,15 @@ Construct a portfolio of instruments and see different metrics on different time
 
 ### Install JS deps
 
-`bower install`
+```bower install```
+
+### Leiningen build dev once
+```lein cljsbuild once dev```
 
 ### Leiningen cljs auto build
 
-`lein cljsbuild auto portfolio`
+```lein cljsbuild auto dev```
 
+### Leiningen cljs auto test
 
+```lein cljsbuild auto test```
