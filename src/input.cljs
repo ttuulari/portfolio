@@ -20,16 +20,18 @@
            :value value})
     false))
 
-(defcomponentk input-view [owner state]
+(defcomponentk input-view
   "Portfolio search input om component."
+  [owner state]
   (init-state [_] {:text ""})
 
-  (will-mount [this]
-      (let [click-chan (sub (:notif-chan (om/get-shared owner)) :search-click (chan) false)]
-        (go-loop []
-          (let [search-elem      (<! click-chan)]
-            (swap! state assoc :text ""))
-          (recur))))
+  (will-mount
+   [this]
+   (let [click-chan (sub (:notif-chan (om/get-shared owner)) :search-click (chan) false)]
+     (go-loop []
+              (let [search-elem      (<! click-chan)]
+                (swap! state assoc :text ""))
+              (recur))))
 
   (render [_]
           (i/input
