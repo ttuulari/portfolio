@@ -1,4 +1,5 @@
 (ns portfolio.container
+  "Application main page dom elements."
   (:require
    [om-bootstrap.grid :as g]
    [om-tools.dom :as d :include-macros true]

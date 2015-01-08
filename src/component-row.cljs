@@ -1,4 +1,5 @@
 (ns portfolio.component-row
+  "Om component and related functions to handle a single portfolio stock."
   (:require
     [cljs.core.async :as async
       :refer [<! >! chan pub put!]]

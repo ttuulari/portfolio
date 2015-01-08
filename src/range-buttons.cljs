@@ -1,4 +1,5 @@
 (ns portfolio.range-buttons
+  "Om component for radio style button bank for selecting date range."
   (:require
     [om-bootstrap.button :as b]
     [om.core :as om :include-macros true]

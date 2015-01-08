@@ -1,4 +1,5 @@
 (ns portfolio.navbar
+  "App navbar Om component."
   (:require
     [om.core :as om :include-macros true]
     [om-bootstrap.button :as b]

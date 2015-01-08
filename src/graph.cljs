@@ -1,4 +1,5 @@
 (ns portfolio.graph
+  "Graph plotting Om component. Uses Chartist.js (https://github.com/gionkunz/chartist-js) for plotting."
   (:require
     [om.core :as om :include-macros true]
     [portfolio.price-utils :as price]

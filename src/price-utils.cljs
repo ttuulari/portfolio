@@ -1,8 +1,11 @@
 (ns portfolio.price-utils
+  "Util functions for price sequence based calculations."
   (:require
    [portfolio.util :as util]))
 
-(defn yield [first-price last-price]
+(defn yield
+  "Percentage yield."
+  [first-price last-price]
   (if (zero? last-price)
     0
     (-> last-price
@@ -10,27 +13,31 @@
         (- 1)
         (* 100))))
 
-(defn average [coll]
-  (/ (reduce + coll) (count coll)))
+(defn average [a-seq]
+  (/ (reduce + a-seq) (count a-seq)))
 
-(defn sample-variance [coll]
-  (let [avg     (average coll)
-        diffs   (map (fn [e] (- e avg)) coll)
+(defn sample-variance [a-seq]
+  "Unbiased sample variance."
+  (let [avg     (average a-seq)
+        diffs   (map (fn [e] (- e avg)) a-seq)
         squared (map (fn [e] (* e e)) diffs)]
     (/ (reduce + squared)
-       (- (count coll) 1))))
+       (- (count a-seq) 1))))
 
-(defn sample-std [coll]
-  (Math.pow (sample-variance coll) 0.5))
+(defn sample-std [a-seq]
+  (Math.pow (sample-variance a-seq) 0.5))
 
-(defn return-ratio [coll]
-  (let [nume   (drop 1 coll)
-        deno   (drop-last coll)]
+(defn return-ratio [a-seq]
+  "Sequence's last and first element return ratio."
+  (let [nume   (drop 1 a-seq)
+        deno   (drop-last a-seq)]
     (map / nume deno)))
 
-(defn difference-seq [coll]
-  (let [nume   (drop 1 coll)
-        deno   (drop-last coll)]
+(defn difference-seq
+  "Return a difference sequence based on consecutive values"
+  [a-seq]
+  (let [nume   (drop 1 a-seq)
+        deno   (drop-last a-seq)]
     (map - nume deno)))
 
 (defn sharpe

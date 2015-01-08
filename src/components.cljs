@@ -1,4 +1,7 @@
 (ns portfolio.components
+  "Om component and related functions to handle a the list portfolio component stocks.
+  portfolio-list-view's IWillMount handles the core.async channel listening and updates
+  app state based on channel data."
   (:require
     [cljs.core.async :as async
       :refer [<! >! chan put! sub]]
@@ -11,6 +14,7 @@
     [om-tools.dom :as d :include-macros true])
   (:require-macros [cljs.core.async.macros :refer [go-loop]]))
 
+;;; Column names and widths given here
 (def columns [["Component" "col-sm-2"]
               ["Amount" "col-sm-1"]
               ["$ Price" "col-sm-1"]
@@ -72,6 +76,7 @@
   (reify
     om/IWillMount
     (will-mount [this]
+      ;; Subscribe to different topics on notification channel
       (let [click-chan       (sub (:notif-chan (om/get-shared owner)) :search-click (chan) false)
             remove-chan      (sub (:notif-chan (om/get-shared owner)) :remove-click (chan) false)
             compare-chan     (sub (:notif-chan (om/get-shared owner)) :compare-click (chan) false)

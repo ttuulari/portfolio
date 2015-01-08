@@ -1,4 +1,5 @@
 (ns portfolio.search-results
+  "Om component displaying list group of search results."
   (:require
     [cljs.core.async :as async
       :refer [<! >! chan put! sub]]

@@ -1,4 +1,5 @@
 (ns portfolio.input
+  "Search input form Om component. This one uses om-tools' defcomponentk"
   (:require
     [cljs.core.async :as async
       :refer [>! put! sub chan]]

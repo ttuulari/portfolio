@@ -1,4 +1,5 @@
 (ns portfolio.core
+  "portfolio.core contains the app root component."
   (:require
    [cljs.core.async :as async
     :refer [<! >! chan pub sub put! timeout]]
@@ -33,9 +34,6 @@
   {:target (. js/document (getElementById "components"))
    :shared {:search-chan   search-chan
             :notif-chan    notif-chan}})
-;================ App state demo ==============
-;app-state
-;(swap! app-state (fn [a] (assoc @app-state :results [])))
 
 ;================ Time Travel =================
 
@@ -64,3 +62,8 @@
      (recur))))
 
 (receive-undos)
+
+;================ App state demo ==============
+;app-state
+;(swap! app-state
+;       (fn [a] (assoc @app-state :results [])))

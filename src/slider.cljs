@@ -1,4 +1,5 @@
 (ns portfolio.slider
+  "Om component for a slider. Uses noUISlider JS library."
   (:require
     [portfolio.util :as util]
     [om.core :as om :include-macros true]
