@@ -33,6 +33,9 @@
   {:target (. js/document (getElementById "components"))
    :shared {:search-chan   search-chan
             :notif-chan    notif-chan}})
+;================ App state demo ==============
+;app-state
+;(swap! app-state (fn [a] (assoc @app-state :results [])))
 
 ;================ Time Travel =================
 
