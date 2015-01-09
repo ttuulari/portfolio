@@ -10,17 +10,6 @@
             [portfolio.search-results :as results])
   (:use-macros [dommy.macros :only [node sel sel1]]))
 
-(defn- timeout-helper
-  [test-context delay]
-  (let [now #(.getTime (js/Date.))
-        t (now)]
-    (js/setTimeout
-      (fn []
-        (is test-context (>= (now) (+ t delay))
-          "an assertion message is required when explicitly passing test context to `is`")
-        (done test-context))
-      delay)))
-
 (deftest navbar-renders?
   (let [data true]
     (testing "navbar class found"
