@@ -1,6 +1,7 @@
 # Portfolio analyser
 
 Construct a portfolio of instruments and see different metrics on different time intervals.
+A ClojureScript/Om evaluation.
 
 ## Installing
 
@@ -12,13 +13,13 @@ Construct a portfolio of instruments and see different metrics on different time
 
 First autobuilds need patience.
 
-### Leiningen build dev once
+### build dev once
 ```lein cljsbuild once dev```
 
-### Leiningen build production once
+### build production once
 ```lein cljsbuild once prod```
 
-### Leiningen cljs auto build
+### cljs auto build
 
 ```lein cljsbuild auto dev```
 
@@ -26,6 +27,6 @@ First autobuilds need patience.
 
 Have phantomjs installed.
 
-### Leiningen cljs auto test
+### cljs auto test
 
 ```lein cljsbuild auto test```
