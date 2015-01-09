@@ -30,3 +30,10 @@ Have phantomjs installed.
 ### cljs auto test
 
 ```lein cljsbuild auto test```
+
+## License
+
+Copyright © 2015 Teemu Tuulari
+
+Distributed under the Eclipse Public License either version 1.0 or (at
+your option) any later version.
